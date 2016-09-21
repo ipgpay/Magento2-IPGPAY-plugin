@@ -8,6 +8,12 @@
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_Response_Declined extends IPGPAY_Response_Abstract {
+namespace IPGPAY\Response;
+
+/**
+ * Class Declined
+ * @package IPGPAY\Response
+ */
+class Declined extends ResponseAbstract {
 
 }

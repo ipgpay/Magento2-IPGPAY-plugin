@@ -8,7 +8,9 @@
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_Response_Error extends IPGPAY_Response_Abstract {
+namespace IPGPAY\Response;
+
+class Error extends ResponseAbstract {
     public $Errors = array();
 
     /**
@@ -16,9 +18,9 @@ class IPGPAY_Response_Error extends IPGPAY_Response_Abstract {
      * Set the response code and response text to that of the first error
      * Keep a list of the full errors
      *
-     * @param SimpleXMLElement $Xml
+     * @param \SimpleXMLElement $Xml
      */
-    function __construct (SimpleXMLElement $Xml) {
+    function __construct (\SimpleXMLElement $Xml) {
         parent::__construct($Xml);
         if (!isset($Xml->response) && isset($Xml->errors)) {
             $this->Response = self::RESPONSE_ERROR;

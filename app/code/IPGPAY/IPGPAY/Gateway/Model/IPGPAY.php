@@ -185,11 +185,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
 
         return $this;
     }
-
-    /**
-     * @param $orderExtraInfo
-     * @throws Exception\PaymentException
-     */
+    
     protected function validateOrderExtraInfo($orderExtraInfo)
     {
         if(empty($orderExtraInfo)){
@@ -201,20 +197,13 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
         }    
     }
 
-    /**    
-     * set redirect url after order place
-     * 
-     * @return mixed
-     */
+    /*set redirect url after order place */
     public function getOrderPlaceRedirectUrl()
     {
         //TODO This doesn't work anymore
         return Mage::getUrl("ipgpay/gateway/redirect");
     }
 
-    /**
-     * @return string
-     */
     public function getCode()
     {
         return 'paymentgateway';

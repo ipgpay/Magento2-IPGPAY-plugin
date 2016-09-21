@@ -8,17 +8,48 @@
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-$dir = dirname(__FILE__);
-require($dir . '/Config.php');
-require($dir . '/Functions.php');
-require($dir . '/Request/Abstract.php');
-require($dir . '/Request/Settle.php');
-require($dir . '/Request/Void.php');
-require($dir . '/Request/Credit.php');
-require($dir . '/Response/Abstract.php');
-require($dir . '/Response/Success.php');
-require($dir . '/Response/Declined.php');
-require($dir . '/Response/Error.php');
-require($dir . '/Exceptions/InvalidRequestException.php');
-require($dir . '/Exceptions/InvalidResponseException.php');
-require($dir . '/Exceptions/CommunicationException.php');
+IPGPAY::register();
+
+class IPGPAY
+{
+    private static $map = [];
+
+    public static function loadClass($class) {
+        if ('\\' == $class[0]) {
+            $class = substr($class, 1);
+        }
+
+        if (false !== $pos = strrpos($class, '\\')) {
+            // namespaced class name
+            $classPath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, 0, $pos)) . DIRECTORY_SEPARATOR;
+            $className = substr($class, $pos + 1);
+        } else {
+            // PEAR-like class name
+            $classPath = null;
+            $className = $class;
+        }
+
+        $classPath .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+        foreach (self::$map as $prefix => $dirs) {
+            if (0 === strpos($class, $prefix)) {
+                foreach ($dirs as $dir) {
+                    if (file_exists($dir . DIRECTORY_SEPARATOR . $classPath)) {
+                        include_once $dir . DIRECTORY_SEPARATOR . $classPath;
+                        return;
+                    } else {
+                        user_error($dir . DIRECTORY_SEPARATOR . $classPath. " does not exist!");
+                    }
+                }
+            } else {
+                user_error("Unable to resolve class $class");
+            }
+        }
+    }
+
+    public static function register() {
+        self::$map = [
+            'IPGPAY' => [ 0 => __DIR__.'/..' ],
+        ];
+        spl_autoload_register(array(__CLASS__, 'loadClass'), true);
+    }
+}

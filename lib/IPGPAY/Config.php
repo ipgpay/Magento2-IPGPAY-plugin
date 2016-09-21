@@ -8,12 +8,32 @@
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_Config
-{
-    const API_BASE_URL = 'https://my.ipgpay.com';
+namespace IPGPAY;
 
+/**
+ * Class Config
+ * @package IPGPAY
+ */
+class Config
+{
+    /**
+     *
+     */
+    const API_BASE_URL = 'https://my.ipgpay.com';
+    /**
+     *
+     */
     const API_CLIENT_ID = '';
+    /**
+     *
+     */
     const API_KEY = '';
+    /**
+     *
+     */
     const NOTIFY = 1;
+    /**
+     *
+     */
     const TEST_MODE = 0;
 }

@@ -8,6 +8,8 @@
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_InvalidResponseException extends Exception {
+namespace IPGPAY\Exceptions;
+
+class InvalidResponseException extends \Exception {
     //TODO meaningful content
 }

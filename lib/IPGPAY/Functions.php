@@ -8,7 +8,12 @@
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_Functions {
+namespace IPGPAY;
+/**
+ * Class Functions
+ * @package IPGPAY
+ */
+class Functions {
     /**
      * Valid numeric amount. Checks to how many digits the decimal amount has if decimals exists. At most it can be 2.
      *
