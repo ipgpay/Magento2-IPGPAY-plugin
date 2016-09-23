@@ -1,0 +1,7 @@
+{
+  "name": "IPGPAY/Gateway",
+  "autoload": {
+    "psr-4": { "IPGPAY\\Gateway\\": "" },
+    "files": [ "registration.php" ]
+  } 
+}
