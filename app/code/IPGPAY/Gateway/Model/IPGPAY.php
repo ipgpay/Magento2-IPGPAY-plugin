@@ -204,19 +204,20 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
     /**    
      * set redirect url after order place
      * 
-     * @return mixed
-     */
+     * @return mixed      
+     * @deprecated this method isn't supported in magento 2
     public function getOrderPlaceRedirectUrl()
     {
-        //TODO This doesn't work anymore
-        return Mage::getUrl("ipgpay/gateway/redirect");
+        return $this->_urlBuilder->getUrl("ipgpay/gateway/redirect");
     }
+    */
 
     /**
      * @return string
-     */
+     
     public function getCode()
     {
         return 'paymentgateway';
-    }
+    }  
+     * */
 }

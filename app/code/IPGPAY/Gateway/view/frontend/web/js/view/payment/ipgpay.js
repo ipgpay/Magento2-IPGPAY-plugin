@@ -16,7 +16,7 @@ define(
         'use strict';
         rendererList.push(
             {
-                type: 'ipgpay',
+                type: 'ipgpay_gateway',
                 component: 'IPGPAY_Gateway/js/view/payment/method-renderer/ipgpay-method'
             }
         );
