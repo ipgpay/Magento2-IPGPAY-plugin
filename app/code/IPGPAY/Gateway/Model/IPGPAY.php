@@ -25,7 +25,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
      *
      * @var string
      */
-    protected $_code = 'ipgpay';
+    protected $_code = 'ipgpay_gateway';
 
     /**
      * Availability option

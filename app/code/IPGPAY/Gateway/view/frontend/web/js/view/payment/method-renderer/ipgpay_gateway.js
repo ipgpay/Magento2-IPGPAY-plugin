@@ -8,7 +8,10 @@ define(
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'IPGPAY_Gateway/payment/ipgpay-gateway'
+                template: 'IPGPAY_Gateway/payment/ipgpay_gateway'
+            },
+            getCode: function() {
+                return 'ipgpay_gateway';
             },
 
             isActive: function() {

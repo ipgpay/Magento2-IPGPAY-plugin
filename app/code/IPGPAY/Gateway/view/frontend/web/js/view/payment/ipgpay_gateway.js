@@ -17,7 +17,7 @@ define(
         rendererList.push(
             {
                 type: 'ipgpay_gateway',
-                component: 'IPGPAY_Gateway/js/view/payment/method-renderer/ipgpay-method'
+                component: 'IPGPAY_Gateway/js/view/payment/method-renderer/ipgpay_gateway'
             }
         );
         /** Add view logic here if needed */

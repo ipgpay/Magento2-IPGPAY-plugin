@@ -35,9 +35,9 @@
                                                         <!-- Declare the payment method (the component that registrates in the list). START -->
                                                         <item name="renders" xsi:type="array">
                                                             <item name="children" xsi:type="array">
-                                                                <item name="ipgpay_gateway_group" xsi:type="array">
+                                                                <item name="ipgpay_gateway" xsi:type="array">
                                                                     <!-- Example of value: Magento_Authorizenet/js/view/payment/authorizenet-->
-                                                                    <item name="component" xsi:type="string">IPGPAY_Gateway/js/view/payment/ipgpay</item>
+                                                                    <item name="component" xsi:type="string">IPGPAY_Gateway/js/view/payment/ipgpay_gateway</item>
                                                                     <item name="methods" xsi:type="array">
 
                                                                         <!-- Add this if your payment method requires entering a billing address-->
