@@ -5,10 +5,10 @@
  */
 namespace IPGPAY\Gateway\Model;
 
-use IPGPAY\Request\Credit;
-use IPGPAY\Request\Settle;
-use IPGPAY\Request\Void;
-use IPGPAY\Response\Success;
+use IPGPAY\Gateway\Api\Request\Credit;
+use IPGPAY\Gateway\Api\Request\Settle;
+use IPGPAY\Gateway\Api\Request\Void;
+use IPGPAY\Gateway\Api\Response\Success;
 use \Magento\Payment\Model;
 use \Magento\Payment\Model\MethodInterface;
 use \Magento\Framework\Exception;
