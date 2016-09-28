@@ -32,29 +32,6 @@ define(
             isActive: function() {
                 return true;
             },
-            placeOrder: function (data, event) {
-                if (event) {
-                    event.preventDefault();
-                }
-                var self = this,
-                    placeOrder,
-                    emailValidationResult = customer.isLoggedIn(),
-                    loginFormSelector = 'form[data-role=email-with-possible-login]';
-                if (!customer.isLoggedIn()) {
-                    $(loginFormSelector).validation();
-                    emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
-                }
-                if (emailValidationResult && this.validate() && additionalValidators.validate()) {
-                    this.isPlaceOrderActionAllowed(false);
-                    placeOrder = placeOrderAction(this.getData(), false, this.messageContainer);
-
-                    $.when(placeOrder).fail(function () {
-                        self.isPlaceOrderActionAllowed(true);
-                    }).done(this.afterPlaceOrder.bind(this));
-                    return true;
-                }
-                return false;
-            },
             afterPlaceOrder: function () {
                 this.selectPaymentMethod();
                 setPaymentMethodAction(this.messageContainer);
