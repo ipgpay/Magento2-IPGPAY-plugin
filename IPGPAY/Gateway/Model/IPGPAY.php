@@ -52,12 +52,12 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
     /**
      * @var bool
      */
-    protected $_canRefundInvoicePartial = false;
+    protected $_canRefundInvoicePartial = true;
 
     /**
      * @var bool
      */
-    protected $_canVoid = false;
+    protected $_canVoid = true;
 
     /**
      * @var bool
