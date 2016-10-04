@@ -26,7 +26,8 @@ class Cancel extends Action
             $order->cancel()
                 ->addStatusToHistory(Order::STATE_CANCELED,'Gateway has declined the payment.',true);
         }
-        $this->_redirect('checkout/onepage/failure');
+        $this->_getCheckout()->restoreQuote();
+        $this->_redirect('checkout');
     }
 
     /**
