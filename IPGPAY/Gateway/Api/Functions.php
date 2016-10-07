@@ -102,7 +102,7 @@ class Functions {
         if (isset($data['PS_SIGNATURE'])) unset($data['PS_SIGNATURE']);
         ksort($data, SORT_STRING);
         foreach($data as $key => $value) {
-            $secret .= sprintf('&%s=%s', $key, $value);
+            $secret .= sprintf('&%s=%s', $key, html_entity_decode($value, ENT_COMPAT | ENT_HTML5, 'UTF-8'));
         }
 
         return sha1($secret);
