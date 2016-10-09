@@ -365,6 +365,10 @@ class Handle extends Action
     private function handleVoidNotification()
     {
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_VOIDED, $this->order->getState());
+        if($this->order->canCancel()){
+            $this->order->setState(Order::STATE_CANCELED);
+            $this->order->setStatus(Order::STATE_CANCELED);
+        }
         return $this;
     }
 
