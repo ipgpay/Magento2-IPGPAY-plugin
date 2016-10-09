@@ -368,6 +368,7 @@ class Handle extends Action
         if($this->order->canCancel()){
             $this->order->setState(Order::STATE_CANCELED);
             $this->order->setStatus(Order::STATE_CANCELED);
+            $this->order->save();
         }
         return $this;
     }
