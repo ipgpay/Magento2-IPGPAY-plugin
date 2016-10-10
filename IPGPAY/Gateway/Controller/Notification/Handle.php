@@ -18,6 +18,9 @@ use Magento\Store\Model\ScopeInterface;
 use IPGPAY\Gateway\Api\Constants;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use \Magento\Sales\Model\Order\CreditmemoFactory;
+use \Magento\Sales\Model\Service\CreditmemoService;
+use \Magento\Sales\Model\Order\Invoice;
 
 /**
  * Class Handle
@@ -46,11 +49,13 @@ class Handle extends Action
      */
     protected $payment;
 
+
     /**
      * Constructor
      *
      * @param Context $context
      * @param ScopeConfigInterface $scopeConfig
+
      */
     public function __construct(
         Context $context,
@@ -71,16 +76,16 @@ class Handle extends Action
         $this->validate();
         unset($this->fields['PS_EXPIRETIME']);
         unset($this->fields['PS_SIGTYPE']);
-        
+
         //Certain notifications can be ignored
         if ($this->canIgnore()) {
-            die(Constants::NOTIFICATION_RESPONSE_SUCCESSFUL); 
+            die(Constants::NOTIFICATION_RESPONSE_SUCCESSFUL);
         }
-        
+
         //Load the order and related payment, save the notification to the payment
         $this->loadOrderAndPayment();
         $this->saveNotificationToPayment();
-        
+
         //Process the notification
         switch ($this->getNotificationType()) {
             case Constants::NOTIFICATION_TYPE_ORDER:
@@ -121,7 +126,7 @@ class Handle extends Action
         die(Constants::NOTIFICATION_RESPONSE_SUCCESSFUL);
     }
 
-    /**     
+    /**
      * Create an invoice for order
      *
      * @return Order\Invoice|null
@@ -133,6 +138,7 @@ class Handle extends Action
             $invoice->setTransactionId($this->fields['trans_id']);
             $invoice->register();
             //$invoice->setRequestedCaptureCase(Order\Invoice::CAPTURE_OFFLINE);
+            $invoice->setState(Order\Invoice::STATE_PAID);
             $invoice->save();
             return $invoice;
         }
@@ -140,9 +146,9 @@ class Handle extends Action
     }
 
 
-    /**  
+    /**
      * Update order state with a comment
-     * 
+     *
      * @param string $stateText
      * @param string $stateCode
      * @return $this
@@ -155,8 +161,8 @@ class Handle extends Action
     }
 
     /**
-     * Parse the notification params 
-     * 
+     * Parse the notification params
+     *
      * @return $this
      */
     private function parseParams()
@@ -170,7 +176,7 @@ class Handle extends Action
         return $this;
     }
 
-    /**  
+    /**
      * Get the secret
      * @return string
      */
@@ -180,8 +186,8 @@ class Handle extends Action
     }
 
     /**
-     * Validate the notification       
-     * 
+     * Validate the notification
+     *
      * @return $this
      */
     private function validate()
@@ -216,21 +222,21 @@ class Handle extends Action
         return $this->fields['notification_type'];
     }
 
-    /**    
+    /**
      * Check to see if the notification can be ignored
-     * 
+     *
      * @return bool
      */
     private function canIgnore()
     {
-        if(!in_array($this->fields['notification_type'], 
+        if(!in_array($this->fields['notification_type'],
             [
                 Constants::NOTIFICATION_TYPE_ORDER,
                 Constants::NOTIFICATION_TYPE_ORDER_PENDING,
-                Constants::NOTIFICATION_TYPE_ORDER_FAILURE, 
-                Constants::NOTIFICATION_TYPE_VOID, 
-                Constants::NOTIFICATION_TYPE_SETTLE, 
-                Constants::NOTIFICATION_TYPE_CREDIT, 
+                Constants::NOTIFICATION_TYPE_ORDER_FAILURE,
+                Constants::NOTIFICATION_TYPE_VOID,
+                Constants::NOTIFICATION_TYPE_SETTLE,
+                Constants::NOTIFICATION_TYPE_CREDIT,
                 Constants::NOTIFICATION_TYPE_REBILL_SUCCESS,
             ]
         )){
@@ -239,7 +245,7 @@ class Handle extends Action
         return false;
     }
 
-    /**    
+    /**
      * Load the order and payment
      */
     private function loadOrderAndPayment()
@@ -247,7 +253,7 @@ class Handle extends Action
         $this->order = $this->_objectManager->get('Magento\Sales\Model\Order')->loadByIncrementId($this->fields['order_reference']);
         $this->payment = $this->order->getPayment();
     }
-    
+
     /**
      * @return $this
      */
@@ -307,7 +313,7 @@ class Handle extends Action
     }
 
     /**
-     * @param $type 
+     * @param $type
      * @return $this
      */
     private function addTransaction($type)
@@ -395,8 +401,27 @@ class Handle extends Action
         //If credit was done in Magento, state may be moved to closed if whole order has been credited.
         //The gateway supports credits on rebills which doesn't mean the order should be closed.
         $this->addTransaction(Payment\Transaction::TYPE_REFUND);
+
+
+        $creditMemoFactory = $this->createObject('Magento\Sales\Model\Order\CreditmemoFactory');
+        $creditMemoService = $this->createObject('Magento\Sales\Model\Service\CreditmemoService');
+
+        $creditMemo = $creditMemoFactory->createByOrder($this->order);
+        $invoices = $this->order->getInvoiceCollection();
+        foreach($invoices as $invoice){
+            $creditMemo->setInvoice($invoice);
+        }
+
+        $creditMemo->setGrandTotal(abs($this->fields['amount']));
+        $creditMemoService->refund($creditMemo, true);
+
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_CREDITED, $this->order->getState());
         return $this;
+    }
+
+    protected function createObject($name)
+    {
+        return $this->_objectManager->create($name);
     }
 
     /**
@@ -435,4 +460,3 @@ class Handle extends Action
         return !empty($this->fields['trans_id']);
     }
 }
-
