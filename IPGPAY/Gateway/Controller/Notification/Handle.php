@@ -413,6 +413,7 @@ class Handle extends Action
             $creditMemo->setInvoice($invoice);
         }
 
+        $creditMemo->setSubtotal(abs($this->fields['amount']));
         $creditMemo->setGrandTotal(abs($this->fields['amount']));
         $creditMemoService->refund($creditMemo, true);
 
