@@ -139,6 +139,7 @@ class Handle extends Action
             $invoice->register();
             //$invoice->setRequestedCaptureCase(Order\Invoice::CAPTURE_OFFLINE);
             $invoice->setState(Order\Invoice::STATE_PAID);
+            $invoice->pay();
             $invoice->save();
             return $invoice;
         }
