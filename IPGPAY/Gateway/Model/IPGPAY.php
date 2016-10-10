@@ -126,7 +126,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
             'api_base_url' => $this->getConfigData('api_base_url'),
             'api_client_id' => $this->getConfigData('account_id'),
             'api_key' => $this->getConfigData('api_key'),
-            'notify' => '1',
+            'notify' => '0', //do not notify to avoid duplicate 
             'test_mode' => $this->getConfigData('test_mode')
         ]);
 
@@ -162,7 +162,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
             'api_base_url' => $this->getConfigData('api_base_url'),
             'api_client_id' => $this->getConfigData('account_id'),
             'api_key' => $this->getConfigData('api_key'),
-            'notify' => '1',
+            'notify' => '0', //do not notify to avoid duplicate 
             'test_mode' => $this->getConfigData('test_mode')
         ]);
 
