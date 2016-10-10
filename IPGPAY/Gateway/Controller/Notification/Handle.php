@@ -408,12 +408,11 @@ class Handle extends Action
         $creditMemoService = $this->createObject('Magento\Sales\Model\Service\CreditmemoService');
 
         $creditMemo = $creditMemoFactory->createByOrder($this->order);
-        $invoices = $this->order->getInvoiceCollection();
-        foreach($invoices as $invoice){
-            $creditMemo->setInvoice($invoice);
-        }
 
-        $creditMemo->setSubtotal(abs($this->fields['amount']));
+        if ($this->order->getTotalPaid() > abs($this->fields['amount'])) {
+            $creditMemo->setAdjustmentNegative($this->order->getTotalPaid() - abs($this->fields['amount']));
+        }
+        $creditMemo->setBaseGrandTotal(abs($this->fields['amount']));
         $creditMemo->setGrandTotal(abs($this->fields['amount']));
         $creditMemoService->refund($creditMemo, true);
 
