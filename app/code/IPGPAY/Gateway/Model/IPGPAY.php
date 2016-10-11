@@ -12,7 +12,7 @@ use IPGPAY\Gateway\Api\Response\Success;
 use \Magento\Payment\Model;
 use \Magento\Payment\Model\MethodInterface;
 use \Magento\Framework\Exception;
-use Magento\Sales\Model\Order\Payment;
+use \Magento\Sales\Model\Order\Payment;
 
 /**
  * Pay In Store payment method model
