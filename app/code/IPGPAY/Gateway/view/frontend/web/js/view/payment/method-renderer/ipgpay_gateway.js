@@ -25,7 +25,6 @@ define(
             },
             afterPlaceOrder: function () {
                 window.location.replace(url.build('ipgpay/redirect/index'));
-                //$.mage.redirect('ipgpay/redirect/index');
             }
         });
     }
