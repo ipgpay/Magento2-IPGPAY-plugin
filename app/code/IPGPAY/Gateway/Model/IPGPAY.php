@@ -9,10 +9,10 @@ use IPGPAY\Gateway\Api\Request\Credit;
 use IPGPAY\Gateway\Api\Request\Settle;
 use IPGPAY\Gateway\Api\Request\Void;
 use IPGPAY\Gateway\Api\Response\Success;
-use \Magento\Payment\Model;
-use \Magento\Payment\Model\MethodInterface;
-use \Magento\Framework\Exception;
-use \Magento\Sales\Model\Order\Payment;
+use Magento\Payment\Model;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\Exception;
+use Magento\Sales\Model\Order\Payment;
 
 /**
  * Pay In Store payment method model

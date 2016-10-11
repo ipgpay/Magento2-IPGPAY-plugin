@@ -11,16 +11,16 @@
 namespace IPGPAY\Gateway\Controller\Notification;
 
 use IPGPAY\Gateway\Api\Functions;
-use \Magento\Framework\App\Action\Action;
-use \Magento\Framework\App\Action\Context;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
-use \Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use IPGPAY\Gateway\Api\Constants;
-use \Magento\Sales\Model\Order;
-use \Magento\Sales\Model\Order\Payment;
-use \Magento\Sales\Model\Order\CreditmemoFactory;
-use \Magento\Sales\Model\Service\CreditmemoService;
-use \Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Service\CreditmemoService;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * Class Handle
