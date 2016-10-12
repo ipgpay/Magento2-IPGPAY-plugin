@@ -156,7 +156,7 @@ class Handle extends Action
     private function modifyOrderPayment($stateText, $stateCode)
     {
         $message = sprintf("IPGPAY Payment: %s\n\n", $stateText) . $this->getExtraInfo();
-        $this->order->addStatusToHistory($stateCode, $message ,true)->save();
+        $this->order->addStatusToHistory($stateCode, $message , false)->save();
         return $this;
     }
 
