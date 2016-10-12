@@ -67,7 +67,7 @@ class Handle extends Action
 
 
     /**
-     *
+     * Entry point for controller handling
      */
     public function execute()
     {
