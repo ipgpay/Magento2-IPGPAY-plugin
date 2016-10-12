@@ -102,6 +102,9 @@ class Functions {
         if (isset($data['PS_SIGNATURE'])) unset($data['PS_SIGNATURE']);
         ksort($data, SORT_STRING);
         foreach($data as $key => $value) {
+            //We need to decode as in some cases the escaped equivalent is already in the database and when the redirect
+            //form submits, the browser turns it into a non escaped version causing signatures not to match when received
+            //by the gateway.
             $secret .= sprintf('&%s=%s', $key, html_entity_decode($value, ENT_COMPAT | ENT_HTML5, 'UTF-8'));
         }
 
