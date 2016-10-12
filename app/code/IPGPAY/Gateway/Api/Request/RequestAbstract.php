@@ -120,7 +120,7 @@ abstract class RequestAbstract {
         curl_setopt($ch, CURLOPT_URL, $this->getRequestUrl());
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->RequestParams));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->RequestParams);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         $response = curl_exec($ch);
