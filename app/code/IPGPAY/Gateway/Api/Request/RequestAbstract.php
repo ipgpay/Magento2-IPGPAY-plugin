@@ -126,8 +126,9 @@ abstract class RequestAbstract {
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
+            $msg = "cURL error: ".curl_errno($ch)." ".curl_error($ch);
             curl_close($ch);
-            throw new Exceptions\CommunicationException("cURL error: ".curl_errno($ch)." ".curl_error($ch));
+            throw new Exceptions\CommunicationException($msg);
         }
 
         curl_close($ch);
