@@ -264,7 +264,6 @@ class Handle extends Action
         $this->payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS,$this->fields);
         $this->payment->setAdditionalData(serialize($this->fields));
         $this->payment->save();
-        //$payment->setCcTransId($this->fields['trans_id']);
         return $this;
     }
 
