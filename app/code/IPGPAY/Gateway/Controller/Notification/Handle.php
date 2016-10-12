@@ -137,7 +137,6 @@ class Handle extends Action
             $invoice = $this->order->prepareInvoice();
             $invoice->setTransactionId($this->fields['trans_id']);
             $invoice->register();
-            //$invoice->setRequestedCaptureCase(Order\Invoice::CAPTURE_OFFLINE);
             $invoice->setState(Order\Invoice::STATE_PAID);
             $invoice->pay();
             $invoice->save();
