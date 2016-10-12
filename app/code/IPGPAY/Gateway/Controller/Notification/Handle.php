@@ -356,7 +356,6 @@ class Handle extends Action
     private function handleOrderPendingNotification()
     {
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_PENDING, Order::STATE_PENDING_PAYMENT);
-        //TODO $this->order->queueNewOrderEmail();
         $this->order->setEmailSent(true);
         $history = $this->order->addStatusHistoryComment('Order email sent to customer');
         $history->setIsCustomerNotified(true);
