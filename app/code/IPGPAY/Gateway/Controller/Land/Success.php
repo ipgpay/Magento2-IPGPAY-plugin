@@ -19,11 +19,8 @@ class Success extends Action
      */
     public function execute()
     {
-        //$params = $this->getRequest()->getParams();
-        //$orderId = $params['order_reference'];
-        //TODO validate the signature
         $order = $this->_getCheckout()->getLastRealOrder();
-        if($order->getRealOrderId()) {
+        if(!empty($order) && $order->getRealOrderId()) {
             $this->_getCheckout()->setLastSuccessQuoteId($order->getQuoteId());
         }
         $this->_redirect('checkout/onepage/success');
