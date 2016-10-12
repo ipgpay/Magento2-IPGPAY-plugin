@@ -342,9 +342,14 @@ class Handle extends Action
             $orderState = Order::STATE_PENDING_PAYMENT;
         }
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_APPROVED, $orderState);
-        //TODO $order->queueNewOrderEmail();
+
+        $comment = 'Your payment has been received';
+        /** @var OrderCommentSender $orderCommentSender */
+        $orderCommentSender = $this->createObject('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');
+
+        $orderCommentSender->send($this->order, true, $comment);
         $this->order->setEmailSent(true);
-        $history = $this->order->addStatusHistoryComment('Order email sent to customer');
+        $history = $this->order->addStatusHistoryComment('Payment received email sent to customer');
         $history->setIsCustomerNotified(true);
         $this->order->save();
         return $this;
@@ -356,8 +361,14 @@ class Handle extends Action
     private function handleOrderPendingNotification()
     {
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_PENDING, Order::STATE_PENDING_PAYMENT);
+
+        $comment = 'Your payment has been received and is pending verification';
+        /** @var OrderCommentSender $orderCommentSender */
+        $orderCommentSender = $this->createObject('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');
+
+        $orderCommentSender->send($this->order, true, $comment);
         $this->order->setEmailSent(true);
-        $history = $this->order->addStatusHistoryComment('Order email sent to customer');
+        $history = $this->order->addStatusHistoryComment('Payment pending email sent to customer');
         $history->setIsCustomerNotified(true);
         $this->order->save();
         return $this;
