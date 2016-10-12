@@ -1,29 +1,53 @@
 <?php
 /**
   * @version $Id$
-  * @copyright Copyright (c) 2002 - 2013 IPG Holdings Limited (a company incorporated in Cyprus).
+  * @copyright Copyright (c) 2002 - 2016 IPG Holdings Limited (a company incorporated in Cyprus).
   * All rights reserved. Use is strictly subject to licence terms & conditions.
   * This computer software programme is protected by copyright law and international treaties.
   * Unauthorised reproduction, reverse engineering or distribution of the programme, or any part of it, may
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_Request_Credit extends IPGPAY_Request_Abstract {
+namespace IPGPAY\Gateway\Api\Request;
+
+use IPGPAY\Gateway\Api\Exceptions\InvalidRequestException;
+use IPGPAY\Gateway\Api\Functions;
+
+/**
+ * Class Credit
+ * @package IPGPAY\Request
+ */
+class Credit extends RequestAbstract {
+    /**
+     * @var
+     */
     protected $OrderId; //Mandatory
+    /**
+     * @var
+     */
     protected $TransId; //Mandatory
+    /**
+     * @var
+     */
     protected $Amount; //Optional
+    /**
+     * @var
+     */
     protected $Reason; //Optional
+    /**
+     * @var
+     */
     protected $Reference; //Optional
 
     /**
      * Set the Order Id
      *
      * @param $OrderId
-     * @throws IPGPAY_InvalidRequestException
+     * @throws InvalidRequestException
      */
     public function setOrderId($OrderId) {
-        if (!IPGPAY_Functions::isValidSqlInt($OrderId)) {
-            throw new IPGPAY_InvalidRequestException("Invalid Order Id");
+        if (!Functions::isValidSqlInt($OrderId)) {
+            throw new InvalidRequestException("Invalid Order Id");
         }
         $this->OrderId = $OrderId;
     }
@@ -32,11 +56,11 @@ class IPGPAY_Request_Credit extends IPGPAY_Request_Abstract {
      * Set the Trams Id
      *
      * @param $TransId
-     * @throws IPGPAY_InvalidRequestException
+     * @throws InvalidRequestException
      */
     public function setTransId($TransId) {
-        if (!IPGPAY_Functions::isValidSqlBigInt($TransId)) {
-            throw new IPGPAY_InvalidRequestException("Invalid Trans Id");
+        if (!Functions::isValidSqlBigInt($TransId)) {
+            throw new InvalidRequestException("Invalid Trans Id");
         }
         $this->TransId = $TransId;
     }
@@ -45,11 +69,11 @@ class IPGPAY_Request_Credit extends IPGPAY_Request_Abstract {
      * Set the amount
      *
      * @param $Amount
-     * @throws IPGPAY_InvalidRequestException
+     * @throws InvalidRequestException
      */
     public function setAmount($Amount) {
-        if (!IPGPAY_Functions::isValidAmount($Amount)) {
-            throw new IPGPAY_InvalidRequestException("Invalid Credit Amount");
+        if (!Functions::isValidAmount($Amount)) {
+            throw new InvalidRequestException("Invalid Credit Amount");
         }
         $this->Amount = $Amount;
     }
@@ -79,15 +103,15 @@ class IPGPAY_Request_Credit extends IPGPAY_Request_Abstract {
     /**
      * Validate the credit request parameters
      *
-     * @throws IPGPAY_InvalidRequestException
+     * @throws InvalidRequestException
      */
     protected function validate() {
         parent::validate();
         if (empty($this->OrderId)) {
-            throw new IPGPAY_InvalidRequestException("Missing Order Id");
+            throw new InvalidRequestException("Missing Order Id");
         }
         if (empty($this->TransId)) {
-            throw new IPGPAY_InvalidRequestException("Missing Trans Id");
+            throw new InvalidRequestException("Missing Trans Id");
         }
     }
 
@@ -127,6 +151,6 @@ class IPGPAY_Request_Credit extends IPGPAY_Request_Abstract {
      * @return string
      */
     protected function getRequestUrl() {
-        return $this->APIBaseUrl.'/service/order/credit';
+        return rtrim($this->APIBaseUrl,'/').'/service/order/credit';
     }
 }

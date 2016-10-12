@@ -1,34 +1,56 @@
 <?php
 /**
   * @version $Id$
-  * @copyright Copyright (c) 2002 - 2013 IPG Holdings Limited (a company incorporated in Cyprus).
+  * @copyright Copyright (c) 2002 - 2016 IPG Holdings Limited (a company incorporated in Cyprus).
   * All rights reserved. Use is strictly subject to licence terms & conditions.
   * This computer software programme is protected by copyright law and international treaties.
   * Unauthorised reproduction, reverse engineering or distribution of the programme, or any part of it, may
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_Request_CancelRebill extends IPGPAY_Request_Abstract {
+namespace IPGPAY\Gateway\Api\Request;
+
+use IPGPAY\Gateway\Api\Exceptions\InvalidRequestException;
+use IPGPAY\Gateway\Api\Functions;
+
+/**
+ * Class CancelRebill
+ * @package IPGPAY\Request
+ */
+class CancelRebill extends RequestAbstract {
+    /**
+     * @var
+     */
     protected $OrderId; //Mandatory
+    /**
+     * @var
+     */
     protected $Reason; //Optional
+    /**
+     * @var
+     */
     protected $ItemId; //Mandatory
 
     /**
      * Set the Order Id
      *
      * @param $OrderId
-     * @throws IPGPAY_InvalidRequestException
+     * @throws InvalidRequestException
      */
     public function setOrderId($OrderId) {
-        if (!IPGPAY_Functions::isValidSqlInt($OrderId)) {
-            throw new IPGPAY_InvalidRequestException("Invalid Order Id");
+        if (!Functions::isValidSqlInt($OrderId)) {
+            throw new InvalidRequestException("Invalid Order Id");
         }
         $this->OrderId = $OrderId;
     }
 
+    /**
+     * @param $ItemId
+     * @throws InvalidRequestException
+     */
     public function setItemId($ItemId) {
-        if (!IPGPAY_Functions::isValidSqlInt($ItemId)) {
-            throw new IPGPAY_InvalidRequestException("Invalid Item Id");
+        if (!Functions::isValidSqlInt($ItemId)) {
+            throw new InvalidRequestException("Invalid Item Id");
         }
         $this->ItemId = $ItemId;
     }
@@ -49,12 +71,12 @@ class IPGPAY_Request_CancelRebill extends IPGPAY_Request_Abstract {
     /**
      * Validate the void request parameters
      *
-     * @throws IPGPAY_InvalidRequestException
+     * @throws InvalidRequestException
      */
     protected function validate() {
         parent::validate();
         if (empty($this->OrderId)) {
-            throw new IPGPAY_InvalidRequestException("Missing Order Id");
+            throw new InvalidRequestException("Missing Order Id");
         }
     }
 
@@ -83,6 +105,6 @@ class IPGPAY_Request_CancelRebill extends IPGPAY_Request_Abstract {
      * @return string
      */
     protected function getRequestUrl() {
-        return $this->APIBaseUrl.'/service/order/void';
+        return rtrim($this->APIBaseUrl,'/').'/service/order/void';
     }
 }
