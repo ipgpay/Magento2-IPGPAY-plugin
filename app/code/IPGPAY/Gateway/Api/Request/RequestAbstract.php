@@ -21,25 +21,25 @@ use IPGPAY\Gateway\Api\Response\ResponseAbstract;
  */
 abstract class RequestAbstract {
     /**
-     * @var mixed
+     * @var string
      */
     protected $APIBaseUrl;
     /**
-     * @var mixed
+     * @var integer
      */
     protected $APIClientId;
     /**
-     * @var mixed
+     * @var string
      */
     protected $APIKey;
     /**
-     * @var mixed|string
+     * @var integer
      */
-    protected $TestMode = '0';
+    protected $TestMode = 0;
     /**
-     * @var mixed|string
+     * @var integer
      */
-    protected $Notify = '1';
+    protected $Notify = 1;
     /**
      * @var array
      */
