@@ -1,0 +1,8 @@
+<h1 class="page-title">
+    <span class="base"><?php echo $this->escapeHtml($this->getRedirectMessage()); ?></span>
+</h1>
+<fieldset class="fieldset redirect" style="display:none;" id="payment_form_ipgpay">
+    <form id="postforwardform" method="post" action="<?php echo $this->escapeHtml($this->getPaymentFormUrl()); ?>" accept-charset="UTF-8">
+        <?php echo $this->getPaymentFormFields(); ?>
+    </form>
+</fieldset>

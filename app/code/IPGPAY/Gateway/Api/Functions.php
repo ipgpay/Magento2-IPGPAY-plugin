@@ -1,14 +1,20 @@
 <?php
 /**
   * @version $Id$
-  * @copyright Copyright (c) 2002 - 2013 IPG Holdings Limited (a company incorporated in Cyprus).
+  * @copyright Copyright (c) 2002 - 2016 IPG Holdings Limited (a company incorporated in Cyprus).
   * All rights reserved. Use is strictly subject to licence terms & conditions.
   * This computer software programme is protected by copyright law and international treaties.
   * Unauthorised reproduction, reverse engineering or distribution of the programme, or any part of it, may
   * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
   * For further information, please contact the copyright owner by email copyright@ipgholdings.net
 **/
-class IPGPAY_Functions {
+namespace IPGPAY\Gateway\Api;
+
+/**
+ * Class Functions
+ * @package IPGPAY\Gateway\Api
+ */
+class Functions {
     /**
      * Valid numeric amount. Checks to how many digits the decimal amount has if decimals exists. At most it can be 2.
      *
@@ -82,5 +88,42 @@ class IPGPAY_Functions {
         }
 
         return FALSE;
+    }
+
+    /**       
+     * Create a signature 
+     * 
+     * @param $data
+     * @param $secret
+     * @return string
+     */
+    public static function createSignature($data, $secret)
+    {
+        if (isset($data['PS_SIGNATURE'])) unset($data['PS_SIGNATURE']);
+        ksort($data, SORT_STRING);
+        foreach($data as $key => $value) {
+            //We need to decode as in some cases the escaped equivalent is already in the database and when the redirect
+            //form submits, the browser turns it into a non escaped version causing signatures not to match when received
+            //by the gateway.
+            $secret .= sprintf('&%s=%s', $key, html_entity_decode($value, ENT_COMPAT | ENT_HTML5, 'UTF-8'));
+        }
+
+        return sha1($secret);
+    }
+
+    /**   
+     * Check to see if signature is valid
+     * 
+     * @param $signature
+     * @param $data
+     * @param $secret
+     * @return bool
+     */
+    public static function isValidSignature($signature, $data, $secret)
+    {
+        if ($signature == self::createSignature($data, $secret)) {
+            return true;    
+        }   
+        return false;
     }
 }
