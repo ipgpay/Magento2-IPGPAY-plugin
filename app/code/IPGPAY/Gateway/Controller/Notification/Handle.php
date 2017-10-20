@@ -70,13 +70,18 @@ class Handle extends Action
     {
         //Parse and validate the notification params
         $this->parseParams();
-        $this->validate();
+        try {
+            $this->validate();
+        } catch (\Exception $e) {
+            return $e->getMessage();   
+        }
+        
         unset($this->fields['PS_EXPIRETIME']);
         unset($this->fields['PS_SIGTYPE']);
 
         //Certain notifications can be ignored
         if ($this->canIgnore()) {
-            die(Constants::NOTIFICATION_RESPONSE_SUCCESSFUL);
+            return Constants::NOTIFICATION_RESPONSE_SUCCESSFUL;
         }
 
         //Load the order and related payment, save the notification to the payment
@@ -185,20 +190,21 @@ class Handle extends Action
     /**
      * Validate the notification
      *
-     * @return $this
+     * @return $this 
+     * @throws \Exception
      */
     private function validate()
     {
         if(!Functions::isValidSignature($this->signature, $this->fields, $this->getSecret())){
-            die('Invalid signature. Aborting!');
+            throw new \Exception('Invalid signature. Aborting!');
         }
 
         if(!isset($this->fields['notification_type'])){
-            die('Missing notification type');
+            throw new \Exception('Missing notification type');
         }
 
         if(!isset($this->fields['order_reference'])){
-            die('Missing order reference');
+            throw new \Exception('Missing order reference');
         }
         return $this;
     }

@@ -8,6 +8,8 @@
 
 namespace IPGPAY\Gateway\Api;
 
+use \IPGPAY\Gateway\Api\Exceptions;
+
 class ParamSigner
 {
     private $secret;
