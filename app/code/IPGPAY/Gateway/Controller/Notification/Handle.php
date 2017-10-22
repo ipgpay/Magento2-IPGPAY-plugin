@@ -170,7 +170,7 @@ class Handle extends Action
     private function parseParams()
     {
         $this->signature = $this->_request->getParam('PS_SIGNATURE');
-        foreach ($this->_request as $key => $value) {
+        foreach ($this->_request->getParams() as $key => $value) {
             if ($key != 'PS_SIGNATURE' && array_key_exists($key, $_COOKIE) ==false) {
                 $this->fields[$key] = $value;
             }
