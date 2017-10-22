@@ -1,5 +1,6 @@
 <?php
 namespace IPGPAY\Test\Unit\Controller\Redirect;
+
 use IPGPAY\Gateway\Controller\Redirect\Index as Index;
 use Magento\Authorizenet\Controller\Directpost\Payment\Redirect;
 use Magento\Framework\App\RequestInterface;
@@ -10,7 +11,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use \Magento\Framework\Controller\ResultFactory;
 
 class RedirectTest extends \PHPUnit\Framework\TestCase
-{         
+{
+
+         
     protected $objectManager;
     protected $checkoutSessionMock;
     protected $controller;
@@ -47,7 +50,8 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
 
         $this->checkoutSessionMock ->expects(static::once())
         ->method('getLastRealOrder')
-        ->willReturn($this->orderMock);;
+        ->willReturn($this->orderMock);
+        ;
 
         $this->redirectObjectManger = $this-> getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
         ->disableOriginalConstructor()
@@ -75,14 +79,13 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
             'resultFactory' => $this->resultFactory,
             '_objectManager' => $this->redirectObjectManger
         ]);
-
     }
  
     /**
      * @test
      */
-     public function testExecute()
-     {
+    public function testExecute()
+    {
         $this->orderAddressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
             ['getFirstname','getLastname','getCompany','getCity','getRegion','getPostcode','getCountryId','getEmail','getTelephone']
@@ -129,7 +132,5 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         ->method('setData')
         ->with($this->stringContains('client_id=123456&create_customer=1&customer_address=&customer_address2=&customer_city=city&customer_company=company&customer_country=countryid&customer_email=email&customer_first_name=firstname&customer_last_name=lastname&customer_phone=telephone&customer_postcode=postcode&customer_state=region&form_id=123456&merchant_name=name&order_currency=USD&order_reference=123456&shipping_city=city&shipping_company=company&shipping_country=countryid&shipping_email=email&shipping_first_name=firstname&shipping_last_name=lastname&shipping_phone=telephone&shipping_postcode=postcode&shipping_state=region&test_transaction=1'));
         $this->controller->execute();
-         
-     }
-    
+    }
 }

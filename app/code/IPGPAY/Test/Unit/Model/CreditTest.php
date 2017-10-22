@@ -14,7 +14,7 @@ use \IPGPAY\Gateway\Model\IPGPAY as IPGPAY;
 use \Magento\Payment\Model\Info as Info;
 use \IPGPAY\Gateway\Api\Request\Credit as Credit;
 
-class CreditTest extends \PHPUnit\Framework\TestCase 
+class CreditTest extends \PHPUnit\Framework\TestCase
 {
     protected $model;
     /**
@@ -28,14 +28,14 @@ class CreditTest extends \PHPUnit\Framework\TestCase
             'api_key'=>'xYKifLzembIHivJFJveO',
             'notify'=>'0',
             'test_mode'=>'1',
-       ];
-       $this->model = new Credit($config);
+        ];
+        $this->model = new Credit($config);
     }
 
     /**
-    * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-    * @expectedExceptionMessage  Invalid Order Id
-    */
+     * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+     * @expectedExceptionMessage  Invalid Order Id
+     */
     public function test_orderId_empty()
     {
         $config = [
@@ -53,9 +53,9 @@ class CreditTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-    * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-    * @expectedExceptionMessage  Invalid Order Id
-    */
+     * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+     * @expectedExceptionMessage  Invalid Order Id
+     */
     public function test_url_invalidOrderId()
     {
         $config = [
@@ -74,9 +74,9 @@ class CreditTest extends \PHPUnit\Framework\TestCase
 
     
     /**
-    * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-    * @expectedExceptionMessage  Missing Trans Id
-    */
+     * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+     * @expectedExceptionMessage  Missing Trans Id
+     */
     public function test_url_transId_empty()
     {
         $config = [
@@ -95,9 +95,9 @@ class CreditTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-    * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-    * @expectedExceptionMessage  Invalid Trans Id
-    */
+     * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+     * @expectedExceptionMessage  Invalid Trans Id
+     */
     public function test_url_invalidTransId()
     {
         $config = [
@@ -115,9 +115,9 @@ class CreditTest extends \PHPUnit\Framework\TestCase
     }
 
      /**
-    * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-    * @expectedExceptionMessage  Invalid Credit Amount
-    */
+      * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+      * @expectedExceptionMessage  Invalid Credit Amount
+      */
     public function test_url_invalidAmount()
     {
         $config = [
@@ -136,22 +136,22 @@ class CreditTest extends \PHPUnit\Framework\TestCase
 
 
      /**
-     * @test
-     */
-     public function test_default_credit()
-     {
-         $config = [
-              'api_base_url'=>'https://my.ipgholdings.net',
-              'api_client_id'=>'4003442',
-              'api_key'=>'xYKifLzembIHivJFJveO',
-              'notify'=>'0',
-              'test_mode'=>'1',
-         ];
-         $this->model = new Credit($config);
-         $this->model->setOrderId('123456');
-         $this->model->setTransId('1234');
-         $this->model->setAmount('123456');
-         $result = $this->model->sendRequest();
-         $this->assertEquals($result->ResponseCode, 'OP299');
-     }
+      * @test
+      */
+    public function test_default_credit()
+    {
+        $config = [
+            'api_base_url'=>'https://my.ipgholdings.net',
+            'api_client_id'=>'4003442',
+            'api_key'=>'xYKifLzembIHivJFJveO',
+            'notify'=>'0',
+            'test_mode'=>'1',
+        ];
+        $this->model = new Credit($config);
+        $this->model->setOrderId('123456');
+        $this->model->setTransId('1234');
+        $this->model->setAmount('123456');
+        $result = $this->model->sendRequest();
+        $this->assertEquals($result->ResponseCode, 'OP299');
+    }
 }

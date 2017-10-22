@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Controller\Redirect;
 
 use IPGPAY\Gateway\Api\Constants;
@@ -20,7 +20,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Sales\Model\Order;
 use Magento\Framework\Controller\ResultFactory;
 
-class Index extends Action  
+class Index extends Action
 {
     /**
      * @var ScopeConfigInterface
@@ -39,9 +39,9 @@ class Index extends Action
     /**
      * Constructor
      *
-     * @param Context $context   
+     * @param Context $context
      * @param Registry $coreRegistry
-     * @param ScopeConfigInterface $scopeConfig      
+     * @param ScopeConfigInterface $scopeConfig
      * @param PageFactory $pageFactory
      */
     public function __construct(
@@ -57,7 +57,7 @@ class Index extends Action
     }
 
     /**
-     * 
+     *
      */
     public function execute()
     {
@@ -69,10 +69,11 @@ class Index extends Action
         );
         
         $this ->_isUsePopup =$this->getIPGPAYConfig('use_popup');
-        if($this ->_isUsePopup)
-        {
+        if ($this ->_isUsePopup) {
             $signatureLifetime = $this->getIPGPAYConfig('request_expiry');
-            if(!$signatureLifetime) $signatureLifetime = Config::DEFAULT_SIGNATURE_LIFETIME;
+            if (!$signatureLifetime) {
+                $signatureLifetime = Config::DEFAULT_SIGNATURE_LIFETIME;
+            }
     
             $paramSigner = new ParamSigner();
             $paramSigner->setSecret($this->getIPGPAYConfig('secret_key'));
@@ -89,14 +90,11 @@ class Index extends Action
             $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
             $resultJson->setData($paymentFormUrl);
             return $resultJson;
-        }
-        else
-        {
+        } else {
             $this->_coreRegistry->register('ipgpay_payment_form_data', $formSubmissionParameters);
             $this->_coreRegistry->register('ipgpay_payment_form_url', $this->getPaymentFormUrl());
             $resultPage = $this->_resultPageFactory->create();
             return $resultPage;
-    
         }
     }
     
@@ -105,8 +103,11 @@ class Index extends Action
      */
     private function getPaymentFormUrl()
     {
-        return preg_replace('#/payment/form/post#i', '',
-            $this->getIPGPAYConfig('payment_form_url')) . '/payment/form/post';
+        return preg_replace(
+            '#/payment/form/post#i',
+            '',
+            $this->getIPGPAYConfig('payment_form_url')
+        ) . '/payment/form/post';
     }
 
     /**
@@ -120,7 +121,7 @@ class Index extends Action
         $billingAddress = $order->getBillingAddress();
         $billing = [];
         if ($billingAddress) {
-            $billing = array(
+            $billing = [
                 'customer_first_name' => $billingAddress->getFirstname(),
                 'customer_last_name' => $billingAddress->getLastname(),
                 'customer_company' => $billingAddress->getCompany(),
@@ -130,17 +131,17 @@ class Index extends Action
                 'customer_country' => $billingAddress->getCountryId(),
                 'customer_email' => $billingAddress->getEmail(),
                 'customer_phone' => $billingAddress->getTelephone()
-            );
+            ];
             $address = $billingAddress->getStreet();
             if (is_array($address)) {
                 $billing['customer_address'] = $address[0];
                 $billing['customer_address2'] = isset($address[1]) ? $address[1] : '';
-            }   
+            }
         }
         $shippingAddress = $order->getShippingAddress();
         $shipping = [];
         if ($shippingAddress) {
-            $shipping = array(
+            $shipping = [
                 'shipping_first_name' => $shippingAddress->getFirstname(),
                 'shipping_last_name' => $shippingAddress->getLastname(),
                 'shipping_company' => $shippingAddress->getCompany(),
@@ -150,14 +151,14 @@ class Index extends Action
                 'shipping_country' => $shippingAddress->getCountryId(),
                 'shipping_email' => $shippingAddress->getEmail(),
                 'shipping_phone' => $shippingAddress->getTelephone(),
-            );
+            ];
             $address = $shippingAddress->getStreet();
             if (is_array($address)) {
                 $shipping['shipping_address'] = $address[0];
                 $shipping['shipping_address2'] = isset($address[1]) ? $address[1] : '';
             }
         }
-        return array_merge($billing,$shipping);
+        return array_merge($billing, $shipping);
     }
 
     /**
@@ -175,9 +176,10 @@ class Index extends Action
         $orderItems = $order->getAllItems();
         
         $idx = 0;
-        foreach($orderItems as $item)
-        {
-            if($item->getQtyToShip() < 1) continue;
+        foreach ($orderItems as $item) {
+            if ($item->getQtyToShip() < 1) {
+                continue;
+            }
             
             $product = $item->getProduct();
             $items[] = $this->getItemArray(
@@ -189,31 +191,31 @@ class Index extends Action
                 $item->getIsVirtual() ? '1' : '0',
                 $item->getPrice(),
                 $order->getOrderCurrencyCode(),
-                FALSE,
+                false,
                 $this->getIPGPAYConfig('merchant_rebilling')  == '1' ? '1' : '0'
             );
 
             $discount -= $item->getDiscountAmount();
         }
 
-        if($shippingCost > 0) {
+        if ($shippingCost > 0) {
             $items[] = $this->getItemArray(++$idx, null, 'Shipping', 'Shipping and handling', '1', '1', $shippingCost, $order->getOrderCurrencyCode());
         }
 
-        if($taxCost > 0) {
+        if ($taxCost > 0) {
             $items[] = $this->getItemArray(++$idx, null, 'Tax', '', '1', '1', $taxCost, $order->getOrderCurrencyCode());
         }
 
-        if($discount < 0) {
-            $items[] = $this->getItemArray(++$idx, null, 'Discount', '', '1', '1', $discount, $order->getOrderCurrencyCode(), True);
+        if ($discount < 0) {
+            $items[] = $this->getItemArray(++$idx, null, 'Discount', '', '1', '1', $discount, $order->getOrderCurrencyCode(), true);
         }
         return $items;
     }
 
 
-    /**      
+    /**
      * Get item parameters
-     * 
+     *
      * @param $idx
      * @param null $code
      * @param $name
@@ -226,33 +228,33 @@ class Index extends Action
      * @param bool $rebill
      * @return array
      */
-    private function getItemArray($idx, $code = null, $name, $description, $qty, $digital, $price, $currency, $discount=False, $rebill=False)
+    private function getItemArray($idx, $code = null, $name, $description, $qty, $digital, $price, $currency, $discount = false, $rebill = false)
     {
-        if(in_array($currency, Constants::$NonDecimalCurrencies)){
+        if (in_array($currency, Constants::$NonDecimalCurrencies)) {
             $parts = explode('.', $price);
             $price = $parts[0];
-        }else{
+        } else {
             $price = sprintf('%.02f', $price);
         }
 
         $prefix = sprintf('item_%d', $idx);
-        $ret = array(
+        $ret = [
             $prefix . '_name' => $name,
             $prefix . '_description' => $description,
             $prefix . '_qty' => $qty,
             $prefix . '_digital' => $digital,
             $prefix . '_unit_price_' . $currency => $price,
-        );
+        ];
 
-        if(isset($code)){
+        if (isset($code)) {
             $ret[$prefix . '_code'] = $code;
         }
 
-        if($discount) {
+        if ($discount) {
             $ret[$prefix . '_discount'] = '1';
         }
 
-        if($rebill){
+        if ($rebill) {
             $ret[$prefix . '_rebill'] = Constants::REBILL_TYPE_MERCHANT_MANAGED;
         }
 
@@ -270,12 +272,12 @@ class Index extends Action
     /**
      * Get configuration parameters
      *
-     * @param Order $order 
+     * @param Order $order
      * @return array
      */
     private function getGatewayParameters(Order $order)
     {
-        return array(
+        return [
             'client_id' => $this->getIPGPAYConfig('account_id'),
             'return_url' => $this->_url->getUrl('ipgpay/land/cancel'), // return to the shop before compeleting purchase
             'approval_url' => $this->_url->getUrl('ipgpay/land/success'),
@@ -284,9 +286,9 @@ class Index extends Action
             'order_reference' => $order->getIncrementId(),
             'order_currency' => $order->getOrderCurrencyCode(),
             'form_id' => $this->getIPGPAYConfig('payment_form_id'),
-            'merchant_name' => $this->_scopeConfig->getValue('general/store_information/name',ScopeInterface::SCOPE_STORE),
+            'merchant_name' => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
             'create_customer' => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0'
-        );
+        ];
     }
 
     /**
@@ -300,27 +302,28 @@ class Index extends Action
     private function mergeFormParameters($customerParameters, $orderItemsParameters, $gatewayParameters)
     {
         $fields = [];
-        foreach($gatewayParameters as $field => $value) {
+        foreach ($gatewayParameters as $field => $value) {
             $fields[$field] = $value;
         }
 
-        foreach($customerParameters as $field => $value) {
+        foreach ($customerParameters as $field => $value) {
             $fields[$field] = $value;
         }
 
-        foreach($orderItemsParameters as $item) {
-            foreach($item as $field => $value) {
+        foreach ($orderItemsParameters as $item) {
+            foreach ($item as $field => $value) {
                 $fields[$field] = $value;
             }
         }
 
         $signatureLifetime = $this->getIPGPAYConfig('request_expiry');
-        if(!$signatureLifetime) $signatureLifetime = Config::DEFAULT_SIGNATURE_LIFETIME;
-        if(!$this ->_isUsePopup)
-        {
+        if (!$signatureLifetime) {
+            $signatureLifetime = Config::DEFAULT_SIGNATURE_LIFETIME;
+        }
+        if (!$this ->_isUsePopup) {
             $fields['PS_EXPIRETIME'] = time() + 3600 * $signatureLifetime;
             $fields['PS_SIGTYPE'] = Config::SIGNATURE_TYPE;
-            $fields['PS_SIGNATURE'] = Functions::createSignature($fields,$this->getIPGPAYConfig('secret_key'));
+            $fields['PS_SIGNATURE'] = Functions::createSignature($fields, $this->getIPGPAYConfig('secret_key'));
         }
         return $fields;
     }
@@ -331,6 +334,6 @@ class Index extends Action
      */
     private function getIPGPAYConfig($key)
     {
-        return  $this->_scopeConfig->getValue("payment/ipgpay_gateway/$key",ScopeInterface::SCOPE_STORE);
+        return  $this->_scopeConfig->getValue("payment/ipgpay_gateway/$key", ScopeInterface::SCOPE_STORE);
     }
 }

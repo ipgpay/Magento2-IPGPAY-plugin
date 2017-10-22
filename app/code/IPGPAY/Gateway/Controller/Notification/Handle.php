@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Controller\Notification;
 
 use IPGPAY\Gateway\Api\Functions;
@@ -73,7 +73,7 @@ class Handle extends Action
         try {
             $this->validate();
         } catch (\Exception $e) {
-            return $e->getMessage();   
+            return $e->getMessage();
         }
         
         unset($this->fields['PS_EXPIRETIME']);
@@ -135,7 +135,7 @@ class Handle extends Action
      */
     private function createInvoice()
     {
-        if($this->order->canInvoice()) {
+        if ($this->order->canInvoice()) {
             $invoice = $this->order->prepareInvoice();
             $invoice->setTransactionId($this->fields['trans_id']);
             $invoice->register();
@@ -158,7 +158,7 @@ class Handle extends Action
     private function modifyOrderPayment($stateText, $stateCode)
     {
         $message = sprintf("IPGPAY Payment: %s\n\n", $stateText) . $this->getExtraInfo();
-        $this->order->addStatusToHistory($stateCode, $message , false)->save();
+        $this->order->addStatusToHistory($stateCode, $message, false)->save();
         return $this;
     }
 
@@ -170,8 +170,8 @@ class Handle extends Action
     private function parseParams()
     {
         $this->signature = $this->_request->getParam('PS_SIGNATURE');
-        foreach($this->_request as $key => $value) {
-            if($key != 'PS_SIGNATURE' && array_key_exists($key,$_COOKIE) ==false) {
+        foreach ($this->_request as $key => $value) {
+            if ($key != 'PS_SIGNATURE' && array_key_exists($key, $_COOKIE) ==false) {
                 $this->fields[$key] = $value;
             }
         }
@@ -184,26 +184,26 @@ class Handle extends Action
      */
     private function getSecret()
     {
-        return $this->_scopeConfig->getValue('payment/ipgpay_gateway/secret_key',ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue('payment/ipgpay_gateway/secret_key', ScopeInterface::SCOPE_STORE);
     }
 
     /**
      * Validate the notification
      *
-     * @return $this 
+     * @return $this
      * @throws \Exception
      */
     private function validate()
     {
-        if(!Functions::isValidSignature($this->signature, $this->fields, $this->getSecret())){
+        if (!Functions::isValidSignature($this->signature, $this->fields, $this->getSecret())) {
             throw new \Exception('Invalid signature. Aborting!');
         }
 
-        if(!isset($this->fields['notification_type'])){
+        if (!isset($this->fields['notification_type'])) {
             throw new \Exception('Missing notification type');
         }
 
-        if(!isset($this->fields['order_reference'])){
+        if (!isset($this->fields['order_reference'])) {
             throw new \Exception('Missing order reference');
         }
         return $this;
@@ -232,7 +232,8 @@ class Handle extends Action
      */
     private function canIgnore()
     {
-        if(!in_array($this->fields['notification_type'],
+        if (!in_array(
+            $this->fields['notification_type'],
             [
                 Constants::NOTIFICATION_TYPE_ORDER,
                 Constants::NOTIFICATION_TYPE_ORDER_PENDING,
@@ -242,7 +243,7 @@ class Handle extends Action
                 Constants::NOTIFICATION_TYPE_CREDIT,
                 Constants::NOTIFICATION_TYPE_REBILL_SUCCESS,
             ]
-        )){
+        )) {
             return true;
         }
         return false;
@@ -263,7 +264,7 @@ class Handle extends Action
     private function saveNotificationToPayment()
     {
         $this->payment->setTransactionId($this->fields['trans_id']);
-        $this->payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS,$this->fields);
+        $this->payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $this->fields);
         $this->payment->setAdditionalData(serialize($this->fields));
         $this->payment->save();
         return $this;
@@ -275,31 +276,31 @@ class Handle extends Action
     private function getExtraInfo()
     {
         $extraInfoFmt = '';
-        if(isset($this->fields['response'])){
+        if (isset($this->fields['response'])) {
             $extraInfoFmt .= "Response: {$this->fields['response']} ";
         }
 
-        if(isset($this->fields['response_code'])){
+        if (isset($this->fields['response_code'])) {
             $extraInfoFmt .= "Response Code: {$this->fields['response_code']} ";
         }
 
-        if(isset($this->fields['response_text'])){
+        if (isset($this->fields['response_text'])) {
             $extraInfoFmt .= "Response Text: {$this->fields['response_text']} ";
         }
 
-        if(isset($this->fields['trans_id'])){
+        if (isset($this->fields['trans_id'])) {
             $extraInfoFmt .= "Transaction ID: {$this->fields['trans_id']} ";
         }
 
-        if(isset($this->fields['order_id'])){
+        if (isset($this->fields['order_id'])) {
             $extraInfoFmt .= "IPGPAY Order ID: {$this->fields['order_id']} ";
         }
 
-        if(isset($this->fields['trans_type'])){
+        if (isset($this->fields['trans_type'])) {
             $extraInfoFmt .= "Transaction Type: {$this->fields['trans_type']} ";
         }
 
-        if(isset($this->fields['auth_code'])){
+        if (isset($this->fields['auth_code'])) {
             $extraInfoFmt .= "Auth Code: {$this->fields['auth_code']} ";
         }
         return $extraInfoFmt;
@@ -336,9 +337,9 @@ class Handle extends Action
      */
     private function handleOrderNotification()
     {
-        if($this->getTransType() == Constants::TRANSACTION_MODE_SALE){
+        if ($this->getTransType() == Constants::TRANSACTION_MODE_SALE) {
             $orderState = Order::STATE_PROCESSING;
-            if(!$this->hasInvoice()) {
+            if (!$this->hasInvoice()) {
                 $this->createInvoice();
             }
         } else {
@@ -383,7 +384,7 @@ class Handle extends Action
     private function handleVoidNotification()
     {
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_VOIDED, $this->order->getState());
-        if($this->order->canCancel()){
+        if ($this->order->canCancel()) {
             $this->order->setState(Order::STATE_CANCELED);
             $this->order->setStatus(Order::STATE_CANCELED);
             $this->order->save();
@@ -399,7 +400,7 @@ class Handle extends Action
         $this->payment->setIsTransactionClosed(true);
         $this->addTransaction(Payment\Transaction::TYPE_CAPTURE);
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_SETTLED, Order::STATE_PROCESSING);
-        if(!$this->hasInvoice()) {
+        if (!$this->hasInvoice()) {
             $this->createInvoice();
         }
         return $this;
@@ -447,7 +448,7 @@ class Handle extends Action
     private function handleRebillSuccessNotification()
     {
         $transaction = $this->payment->addTransaction(Payment\Transaction::TYPE_PAYMENT);
-        $transaction->setAdditionalInformation(Payment\Transaction::RAW_DETAILS,$this->fields)->save();
+        $transaction->setAdditionalInformation(Payment\Transaction::RAW_DETAILS, $this->fields)->save();
         $this->modifyOrderPayment(Constants::TRANSACTION_STATE_APPROVED, $this->order->getState());
         return $this;
     }
@@ -459,7 +460,7 @@ class Handle extends Action
     {
         if ($this->hasTransactionId()) {
             $transaction = $this->payment->addTransaction(Payment\Transaction::TYPE_VOID);
-            $transaction->setAdditionalInformation(Payment\Transaction::RAW_DETAILS,$this->fields)->save();
+            $transaction->setAdditionalInformation(Payment\Transaction::RAW_DETAILS, $this->fields)->save();
         }
         $this->order->setState(Order::STATE_CANCELED);
         $this->order->setStatus(Order::STATE_CANCELED);

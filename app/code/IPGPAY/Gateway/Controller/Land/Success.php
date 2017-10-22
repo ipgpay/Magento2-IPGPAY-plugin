@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Controller\Land;
 
 use Magento\Framework\App\Action\Action;
@@ -17,7 +17,7 @@ class Success extends Action
     public function execute()
     {
         $order = $this->_getCheckout()->getLastRealOrder();
-        if(!empty($order) && $order->getRealOrderId()) {
+        if (!empty($order) && $order->getRealOrderId()) {
             $this->_getCheckout()->setLastSuccessQuoteId($order->getQuoteId());
         }
         $this->_redirect('checkout/onepage/success');

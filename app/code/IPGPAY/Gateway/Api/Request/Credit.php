@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Api\Request;
 
 use IPGPAY\Gateway\Api\Exceptions\InvalidRequestException;
@@ -14,7 +14,8 @@ use IPGPAY\Gateway\Api\Functions;
  * Class Credit
  * @package IPGPAY\Request
  */
-class Credit extends RequestAbstract {
+class Credit extends RequestAbstract
+{
     /**
      * @var
      */
@@ -42,7 +43,8 @@ class Credit extends RequestAbstract {
      * @param $OrderId
      * @throws InvalidRequestException
      */
-    public function setOrderId($OrderId) {
+    public function setOrderId($OrderId)
+    {
         if (!Functions::isValidSqlInt($OrderId)) {
             throw new InvalidRequestException("Invalid Order Id");
         }
@@ -55,7 +57,8 @@ class Credit extends RequestAbstract {
      * @param $TransId
      * @throws InvalidRequestException
      */
-    public function setTransId($TransId) {
+    public function setTransId($TransId)
+    {
         if (!Functions::isValidSqlBigInt($TransId)) {
             throw new InvalidRequestException("Invalid Trans Id");
         }
@@ -68,7 +71,8 @@ class Credit extends RequestAbstract {
      * @param $Amount
      * @throws InvalidRequestException
      */
-    public function setAmount($Amount) {
+    public function setAmount($Amount)
+    {
         if (!Functions::isValidAmount($Amount)) {
             throw new InvalidRequestException("Invalid Credit Amount");
         }
@@ -80,7 +84,8 @@ class Credit extends RequestAbstract {
      *
      * @param $Reason
      */
-    public function setReason($Reason) {
+    public function setReason($Reason)
+    {
         $this->Reason = $Reason;
     }
 
@@ -90,9 +95,10 @@ class Credit extends RequestAbstract {
      *
      * @param $Reference
      */
-    public function setReference($Reference) {
+    public function setReference($Reference)
+    {
         if (strlen($Reference) > 100) {
-            $Reference = substr($Reference,0,100);
+            $Reference = substr($Reference, 0, 100);
         }
         $this->Reference = $Reference;
     }
@@ -102,7 +108,8 @@ class Credit extends RequestAbstract {
      *
      * @throws InvalidRequestException
      */
-    protected function validate() {
+    protected function validate()
+    {
         parent::validate();
         if (empty($this->OrderId)) {
             throw new InvalidRequestException("Missing Order Id");
@@ -117,8 +124,9 @@ class Credit extends RequestAbstract {
      *
      * @return array
      */
-    protected function buildRequestParams() {
-        $Request = array();
+    protected function buildRequestParams()
+    {
+        $Request = [];
         $Request['client_id'] = $this->APIClientId;
         $Request['api_key'] = $this->APIKey;
         $Request['order_id'] = $this->OrderId;
@@ -147,7 +155,8 @@ class Credit extends RequestAbstract {
      *
      * @return string
      */
-    protected function getRequestUrl() {
-        return rtrim($this->APIBaseUrl,'/').'/service/order/credit';
+    protected function getRequestUrl()
+    {
+        return rtrim($this->APIBaseUrl, '/').'/service/order/credit';
     }
 }

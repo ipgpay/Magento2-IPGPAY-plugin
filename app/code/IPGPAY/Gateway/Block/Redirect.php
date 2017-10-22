@@ -1,11 +1,12 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Block;
+
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Registry;
 
@@ -41,7 +42,7 @@ class Redirect extends Template
     public function getPaymentFormFields()
     {
         $fields = '';
-        foreach($this->_coreRegistry->registry('ipgpay_payment_form_data') as $key => $value){
+        foreach ($this->_coreRegistry->registry('ipgpay_payment_form_data') as $key => $value) {
             $fields .= '<input type="hidden" name="' . $this->escapeHtml($key) . '" id="' . $this->escapeHtml($key) . '" value="' . $this->escapeHtml($value) . '">';
         }
         return $fields;
@@ -63,4 +64,3 @@ class Redirect extends Template
         return $this->escapeHtml("You're being redirected to the IPGPAY Payment Gateway. Please do not close the browser window.");
     }
 }
-

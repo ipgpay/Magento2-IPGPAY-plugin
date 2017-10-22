@@ -1,13 +1,16 @@
 <?php
 namespace IPGPAY\Test\Unit\Controller\Land;
+
 use IPGPAY\Gateway\Controller\Land\Cancel as Cancel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CancelTest extends \PHPUnit\Framework\TestCase
-{         
+{
+
+         
     /**
-    * @var ObjectManager
-    */
+     * @var ObjectManager
+     */
     protected $objectManager;
 
     protected $checkoutSessionMock;
@@ -35,7 +38,8 @@ class CancelTest extends \PHPUnit\Framework\TestCase
 
         $this->checkoutSessionMock ->expects(static::once())
         ->method('getLastRealOrder')
-        ->willReturn($this->orderMock);;
+        ->willReturn($this->orderMock);
+        ;
 
         $this->checkoutSessionMock ->expects(static::once())
         ->method('restoreQuote')
@@ -67,11 +71,12 @@ class CancelTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-     public function testExecute()
-     {
+    public function testExecute()
+    {
         $this->orderMock ->expects(static::once())
         ->method('getRealOrderId')
-        ->willReturn(1);;
+        ->willReturn(1);
+        ;
 
         $this->orderMock ->expects(static::once())
         ->method('cancel')
@@ -85,10 +90,8 @@ class CancelTest extends \PHPUnit\Framework\TestCase
         
         $this->redirectMock ->expects($this->once())
         ->method('redirect')
-        ->with($redirectResponse,$this->equalTo('checkout'));
+        ->with($redirectResponse, $this->equalTo('checkout'));
         
         $this->controller->execute();
-         
-     }
-    
+    }
 }

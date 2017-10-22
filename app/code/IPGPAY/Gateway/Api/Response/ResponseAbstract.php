@@ -1,13 +1,13 @@
 <?php
 /**
-  * @version $Id$
-  * @copyright Copyright (c) 2002 - 2016 IPG Holdings Limited (a company incorporated in Cyprus).
-  * All rights reserved. Use is strictly subject to licence terms & conditions.
-  * This computer software programme is protected by copyright law and international treaties.
-  * Unauthorised reproduction, reverse engineering or distribution of the programme, or any part of it, may
-  * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
-  * For further information, please contact the copyright owner by email copyright@ipgholdings.net
-**/
+ * @version $Id$
+ * @copyright Copyright (c) 2002 - 2016 IPG Holdings Limited (a company incorporated in Cyprus).
+ * All rights reserved. Use is strictly subject to licence terms & conditions.
+ * This computer software programme is protected by copyright law and international treaties.
+ * Unauthorised reproduction, reverse engineering or distribution of the programme, or any part of it, may
+ * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
+ * For further information, please contact the copyright owner by email copyright@ipgholdings.net
+ **/
 namespace IPGPAY\Gateway\Api\Response;
 
 use IPGPAY\Gateway\Api\Exceptions\InvalidResponseException;
@@ -16,7 +16,8 @@ use IPGPAY\Gateway\Api\Exceptions\InvalidResponseException;
  * Class ResponseAbstract
  * @package IPGPAY\Response
  */
-abstract class ResponseAbstract {
+abstract class ResponseAbstract
+{
     /**
      *
      */
@@ -58,7 +59,8 @@ abstract class ResponseAbstract {
      * @return Success|Declined|Error
      * @throws InvalidResponseException
      */
-    public static function factory($ResponseString) {
+    public static function factory($ResponseString)
+    {
         try {
             $Xml = new \SimpleXMLElement($ResponseString);
         } catch (\Exception $e) {
@@ -86,7 +88,8 @@ abstract class ResponseAbstract {
     /**
      * @param \SimpleXMLElement $Xml
      */
-    function __construct (\SimpleXMLElement $Xml) {
+    function __construct(\SimpleXMLElement $Xml)
+    {
         if (isset($Xml->response)) {
             $this->Response = (string)$Xml->response;
         }

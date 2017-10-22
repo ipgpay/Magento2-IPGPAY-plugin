@@ -14,7 +14,7 @@ use \IPGPAY\Gateway\Model\IPGPAY as IPGPAY;
 use \Magento\Payment\Model\Info as Info;
 use \IPGPAY\Gateway\Api\Request\VoidRequest as VoidRequest;
 
-class VoidRequestTest extends \PHPUnit\Framework\TestCase 
+class VoidRequestTest extends \PHPUnit\Framework\TestCase
 {
     protected $model;
     /**
@@ -28,14 +28,14 @@ class VoidRequestTest extends \PHPUnit\Framework\TestCase
             'api_key'=>'xYKifLzembIHivJFJveO',
             'notify'=>'0',
             'test_mode'=>'1',
-       ];
-       $this->model = new VoidRequest($config);
+        ];
+        $this->model = new VoidRequest($config);
     }
 
     /**
-    * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-    * @expectedExceptionMessage  Invalid Order Id
-    */
+     * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+     * @expectedExceptionMessage  Invalid Order Id
+     */
     public function test_orderId_empty()
     {
         $config = [
@@ -48,12 +48,11 @@ class VoidRequestTest extends \PHPUnit\Framework\TestCase
         $voidRequest = new VoidRequest($config);
         $voidRequest->setOrderId(null);
         $voidRequest->setReason('test reason');
-
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function test_default_voidRequest()
     {
         $this->model->setOrderId('123456');

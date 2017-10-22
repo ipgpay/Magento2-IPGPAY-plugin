@@ -75,9 +75,9 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
     protected $_isInitializeNeeded      = true;
 
 
-    /**       
+    /**
      * capture - Settle an authorization transaction
-     * 
+     *
      * @param Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
@@ -88,7 +88,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
         
-        $capture = new Settle ([
+        $capture = new Settle([
             'api_base_url' => $this->getConfigData('api_base_url'),
             'api_client_id' => $this->getConfigData('account_id'),
             'api_key' => $this->getConfigData('api_key'),
@@ -107,7 +107,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
             } else {
                 throw new Exception\PaymentException(__($res->Response . ' (' . $res->ResponseCode . ') ' . $res->ResponseText));
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new Exception\PaymentException(__("Cannot issue a capture on this transaction: ".$e->getMessage()));
         }
 
@@ -115,9 +115,9 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
     }
 
 
-    /**    
+    /**
      * void - Cancel an authorization transaction that has not yet been settled.
-     * 
+     *
      * @param Model\InfoInterface|Payment $payment
      * @return $this
      * @throws Exception\PaymentException
@@ -127,11 +127,11 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
 
-        $void = new VoidRequest ([
+        $void = new VoidRequest([
             'api_base_url' => $this->getConfigData('api_base_url'),
             'api_client_id' => $this->getConfigData('account_id'),
             'api_key' => $this->getConfigData('api_key'),
-            'notify' => '0', //do not notify to avoid duplicate 
+            'notify' => '0', //do not notify to avoid duplicate
             'test_mode' => $this->getConfigData('test_mode')
         ]);
 
@@ -140,12 +140,12 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
         try {
             $void->setOrderId($orderExtraInfo['order_id']);
             $res = $void->sendRequest();
-            if($res instanceof Success){
+            if ($res instanceof Success) {
                 $payment->setTransactionId($res->TransId);
-            }else{
+            } else {
                 throw new Exception\PaymentException(__($res->Response . ' (' . $res->ResponseCode . ') ' . $res->ResponseText));
             }
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             throw new Exception\PaymentException(__("Cannot issue a void on this transaction: ".$e->getMessage()));
         }
         return $this;
@@ -164,11 +164,11 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
 
-        $credit = new Credit ([
+        $credit = new Credit([
             'api_base_url' => $this->getConfigData('api_base_url'),
             'api_client_id' => $this->getConfigData('account_id'),
             'api_key' => $this->getConfigData('api_key'),
-            'notify' => '0', //do not notify to avoid duplicate 
+            'notify' => '0', //do not notify to avoid duplicate
             'test_mode' => $this->getConfigData('test_mode')
         ]);
 
@@ -185,7 +185,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
             } else {
                 throw new Exception\PaymentException(__($res->Response . ' (' . $res->ResponseCode . ') ' . $res->ResponseText));
             }
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             throw new Exception\PaymentException(__("Cannot issue a credit on this transaction: ".$e->getMessage()));
         }
 
@@ -198,12 +198,11 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
      */
     protected function validateOrderExtraInfo($orderExtraInfo)
     {
-        if(empty($orderExtraInfo)){
-            if($this->getDebugFlag())
-            {
+        if (empty($orderExtraInfo)) {
+            if ($this->getDebugFlag()) {
                 $this->debug(["info"=>"Unable to locate original order reference"]);
             }
             throw new Exception\PaymentException(__("Unable to locate original order reference"));
-        }    
+        }
     }
 }

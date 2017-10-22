@@ -1,13 +1,16 @@
 <?php
 namespace IPGPAY\Test\Unit\Controller\Notification;
+
 use IPGPAY\Gateway\Controller\Notification\Handle as Handle;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class HandleTest extends \PHPUnit\Framework\TestCase
-{         
+{
+
+         
     /**
-    * @var ObjectManager
-    */
+     * @var ObjectManager
+     */
     protected $objectManager;
 
     protected $checkoutSessionMock;
@@ -56,7 +59,7 @@ class HandleTest extends \PHPUnit\Framework\TestCase
 
         $this->scoreConfigMock->expects(static::any())
         ->method('getValue')
-        ->with('payment/ipgpay_gateway/secret_key','store')
+        ->with('payment/ipgpay_gateway/secret_key', 'store')
         ->willReturn('QuSfYgaVWoUS');
 
         $request = [
@@ -100,10 +103,9 @@ class HandleTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-     public function testExecute()
-     {
+    public function testExecute()
+    {
         $result =  $this->controller->execute();
-        $this->assertEquals('OK',  $result);
-     }
-    
+        $this->assertEquals('OK', $result);
+    }
 }

@@ -1,14 +1,17 @@
 <?php
 namespace IPGPAY\Test\Unit\Controller\Land;
+
 //namespace IPGPAY\Test\Unit\Model;
 use IPGPAY\Gateway\Controller\Land\Success as Success;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class SuccessTest extends \PHPUnit\Framework\TestCase
-{         
+{
+
+         
     /**
-    * @var ObjectManager
-    */
+     * @var ObjectManager
+     */
     protected $objectManager;
 
     protected $checkoutSessionMock;
@@ -37,7 +40,8 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
 
         $this->checkoutSessionMock ->expects(static::once())
         ->method('getLastRealOrder')
-        ->willReturn($this->orderMock);;
+        ->willReturn($this->orderMock);
+        ;
 
         $this->successObjectManger = $this-> getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
         ->disableOriginalConstructor()
@@ -54,26 +58,24 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
             '_objectManager' => $this->successObjectManger,
             '_redirect' => $this->redirectMock
         ]);
- 
     }
  
     /**
      * @test
      */
-     public function testExecute()
-     {
+    public function testExecute()
+    {
         $this->orderMock ->expects(static::once())
         ->method('getRealOrderId')
-        ->willReturn(1);;
+        ->willReturn(1);
+        ;
 
         $redirectResponse =  $this->createMock(\Magento\Framework\App\ResponseInterface::class);
         
         $this->redirectMock ->expects($this->once())
         ->method('redirect')
-        ->with($redirectResponse,$this->equalTo('checkout/onepage/success'));
+        ->with($redirectResponse, $this->equalTo('checkout/onepage/success'));
 
         $this->controller->execute();
-         
-     }
-    
+    }
 }
