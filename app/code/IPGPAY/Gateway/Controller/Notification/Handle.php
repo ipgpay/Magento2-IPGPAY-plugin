@@ -7,6 +7,7 @@
  **/
 namespace IPGPAY\Gateway\Controller\Notification;
 
+use IPGPAY\Gateway\Api\Exceptions\InvalidNotificationException;
 use IPGPAY\Gateway\Api\Functions;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -72,8 +73,10 @@ class Handle extends Action
         $this->parseParams();
         try {
             $this->validate();
-        } catch (\Exception $e) {
+        } catch (InvalidNotificationException $e) {
             return $e->getMessage();
+        } catch (\Exception $e) {
+            return '';    
         }
         
         unset($this->fields['PS_EXPIRETIME']);
@@ -191,20 +194,20 @@ class Handle extends Action
      * Validate the notification
      *
      * @return $this
-     * @throws \Exception
+     * @throws InvalidNotificationException
      */
     private function validate()
     {
         if (!Functions::isValidSignature($this->signature, $this->fields, $this->getSecret())) {
-            throw new \Exception('Invalid signature. Aborting!');
+            throw new InvalidNotificationException('Invalid signature. Aborting!');
         }
 
         if (!isset($this->fields['notification_type'])) {
-            throw new \Exception('Missing notification type');
+            throw new InvalidNotificationException('Missing notification type');
         }
 
         if (!isset($this->fields['order_reference'])) {
-            throw new \Exception('Missing order reference');
+            throw new InvalidNotificationException('Missing order reference');
         }
         return $this;
     }
