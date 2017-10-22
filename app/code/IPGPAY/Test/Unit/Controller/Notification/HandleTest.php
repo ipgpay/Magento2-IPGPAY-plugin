@@ -59,7 +59,7 @@ class HandleTest extends \PHPUnit\Framework\TestCase
         ->with('payment/ipgpay_gateway/secret_key','store')
         ->willReturn('QuSfYgaVWoUS');
 
-        $_REQUEST = [
+        $request = [
             'PS_SIGNATURE'=>'019a727c78e05c2d2c2db48b2524f39908d2de91',
             'PS_SIGTYPE' => 'PSSHA1',
             'notification_type' => 'orderpending',
@@ -73,7 +73,7 @@ class HandleTest extends \PHPUnit\Framework\TestCase
 
         $this->orderMock ->expects(static::any())
         ->method('loadByIncrementId')
-        ->with($_REQUEST['order_reference'])
+        ->with($request['order_reference'])
         ->willReturnSelf();
 
         $this->orderMock ->expects(static::any())
