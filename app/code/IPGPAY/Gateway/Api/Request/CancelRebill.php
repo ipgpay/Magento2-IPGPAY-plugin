@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Api\Request;
 
 use IPGPAY\Gateway\Api\Exceptions\InvalidRequestException;
@@ -14,7 +14,8 @@ use IPGPAY\Gateway\Api\Functions;
  * Class CancelRebill
  * @package IPGPAY\Request
  */
-class CancelRebill extends RequestAbstract {
+class CancelRebill extends RequestAbstract
+{
     /**
      * @var
      */
@@ -34,7 +35,8 @@ class CancelRebill extends RequestAbstract {
      * @param $OrderId
      * @throws InvalidRequestException
      */
-    public function setOrderId($OrderId) {
+    public function setOrderId($OrderId)
+    {
         if (!Functions::isValidSqlInt($OrderId)) {
             throw new InvalidRequestException("Invalid Order Id");
         }
@@ -45,7 +47,8 @@ class CancelRebill extends RequestAbstract {
      * @param $ItemId
      * @throws InvalidRequestException
      */
-    public function setItemId($ItemId) {
+    public function setItemId($ItemId)
+    {
         if (!Functions::isValidSqlInt($ItemId)) {
             throw new InvalidRequestException("Invalid Item Id");
         }
@@ -58,9 +61,10 @@ class CancelRebill extends RequestAbstract {
      *
      * @param $Reason
      */
-    public function setReason($Reason) {
+    public function setReason($Reason)
+    {
         if (strlen($Reason) > 100) {
-            $Reason = substr($Reason,0,100);
+            $Reason = substr($Reason, 0, 100);
         }
         $this->Reason = $Reason;
     }
@@ -70,7 +74,8 @@ class CancelRebill extends RequestAbstract {
      *
      * @throws InvalidRequestException
      */
-    protected function validate() {
+    protected function validate()
+    {
         parent::validate();
         if (empty($this->OrderId)) {
             throw new InvalidRequestException("Missing Order Id");
@@ -82,8 +87,9 @@ class CancelRebill extends RequestAbstract {
      *
      * @return array
      */
-    protected function buildRequestParams() {
-        $Request = array();
+    protected function buildRequestParams()
+    {
+        $Request = [];
         $Request['client_id'] = $this->APIClientId;
         $Request['api_key'] = $this->APIKey;
         $Request['order_id'] = $this->OrderId;
@@ -101,7 +107,8 @@ class CancelRebill extends RequestAbstract {
      *
      * @return string
      */
-    protected function getRequestUrl() {
-        return rtrim($this->APIBaseUrl,'/').'/service/order/void';
+    protected function getRequestUrl()
+    {
+        return rtrim($this->APIBaseUrl, '/').'/service/order/void';
     }
 }

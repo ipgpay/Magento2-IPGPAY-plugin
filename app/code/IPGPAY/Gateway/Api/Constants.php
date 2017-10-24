@@ -1,17 +1,17 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Api;
 
 /**
  * Class Constants
  * @package IPGPAY\Gateway\Model
  */
-class Constants 
+class Constants
 {
     /**
      * Transaction modes
@@ -80,9 +80,9 @@ class Constants
     /**
      * @var array
      */
-    public static $NonDecimalCurrencies = array("JPY", "VND", "KRW");
+    public static $NonDecimalCurrencies = ["JPY", "VND", "KRW"];
     /**
      * @var array
      */
-    public static $ThreeDecimalCurrencies = array("KWD","OMR","BHD");
+    public static $ThreeDecimalCurrencies = ["KWD","OMR","BHD"];
 }

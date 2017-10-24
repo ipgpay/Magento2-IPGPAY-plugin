@@ -17,10 +17,10 @@ define(
             defaults: {
                 template: 'IPGPAY_Gateway/payment/ipgpay_gateway'
             },
-            getCode: function() {
+            getCode: function () {
                 return 'ipgpay_gateway';
             },
-            isActive: function() {
+            isActive: function () {
                 return true;
             },
             afterPlaceOrder: function () {
@@ -30,9 +30,8 @@ define(
                     dataType: 'json',
                     showLoader: true
                 }).done(function (isUsePopup) {
-                    if(isUsePopup=="1")
-                    {   
-                        setTimeout(function() {
+                    if (isUsePopup=="1") {
+                    setTimeout(function () {
                             $('.action.primary.checkout').attr("disabled",true);
                         }, 0);
         
@@ -88,9 +87,9 @@ define(
                                             break;
                                         case 'PuPayment_Close':
                                             closeModal();
-                                            if(isPaymentSuccess){
+                                            if (isPaymentSuccess) {
                                                 window.location.replace(url.build('ipgpay/land/success'));
-                                            }else{
+                                            } else {
                                                 window.location.replace(url.build('ipgpay/land/cancel'));
                                             }
                                             break;
@@ -101,15 +100,16 @@ define(
                             
                             function closeAndRedirect()
                             {
-                                if(isPaymentSuccess){
+                                if (isPaymentSuccess) {
                                     window.location.replace(url.build('ipgpay/land/success'));
-                                }else{
+                                } else {
                                     window.location.replace(url.build('ipgpay/land/cancel'));
                                 }
                                 closeModal();
                             }
 
-                            function openModal() {
+                            function openModal()
+                            {
                                 var overlay = document.getElementById("pupayment-overlay");
                                 overlay.style.display = (overlay.style.display == "block") ? "none" : "block";
                                 var container = document.getElementById("pupayment-popupContainer");
@@ -117,7 +117,8 @@ define(
                                 return false;
                             }
             
-                            function closeModal(){
+                            function closeModal()
+                            {
                                 overlay = document.getElementById("pupayment-overlay");
                                 overlay.style.display = "none";
                                 var container = document.getElementById("pupayment-popupContainer");
@@ -125,11 +126,11 @@ define(
                             }
             
                             //find elements by class name
-                            function getClassElement(node, classname) {
+                            function getClassElement(node, classname)
+                            {
                                 if (node.getElementsByClassName) {
                                     //find class and return
                                     return node.getElementsByClassName(classname);
-            
                                 } else {
                                     var elems = node.getElementsByTagName(node),
                                         defualt = [];
@@ -144,7 +145,7 @@ define(
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         window.location.replace(url.build('ipgpay/redirect/index'));
                     }
                 });
@@ -152,3 +153,4 @@ define(
         });
     }
 );
+

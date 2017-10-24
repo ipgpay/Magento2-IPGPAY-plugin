@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Controller\Land;
 
 use Magento\Framework\App\Action\Action;
@@ -18,10 +18,10 @@ class Cancel extends Action
     public function execute()
     {
         $order = $this->_getCheckout()->getLastRealOrder();
-        if($order->getRealOrderId()) {
+        if ($order->getRealOrderId()) {
             // Flag the order as 'cancelled'
             $order->cancel()
-                ->addStatusToHistory(Order::STATE_CANCELED,'Gateway has declined the payment.',true);
+                ->addStatusToHistory(Order::STATE_CANCELED, 'Gateway has declined the payment.', true);
         }
         $this->_getCheckout()->restoreQuote();
         $this->_redirect('checkout');

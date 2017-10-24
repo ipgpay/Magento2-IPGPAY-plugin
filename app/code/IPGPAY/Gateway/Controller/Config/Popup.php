@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Controller\Config;
 
 use Magento\Framework\App\Action\Action;
@@ -18,27 +18,27 @@ use Magento\Framework\Controller\ResultFactory;
 class Popup extends Action
 {
     /**
-    * @var ScopeConfigInterface
-    */
+     * @var ScopeConfigInterface
+     */
     protected $_scopeConfig = null;
     /**
-    * @var Registry
-    */
+     * @var Registry
+     */
     protected $_coreRegistry;
     /**
-    * @var PageFactory
-    */
+     * @var PageFactory
+     */
     protected $_resultPageFactory;
 
      /**
-     * Constructor
-     *
-     * @param Context $context   
-     * @param Registry $coreRegistry
-     * @param ScopeConfigInterface $scopeConfig      
-     * @param PageFactory $pageFactory
-     */
-     public function __construct(
+      * Constructor
+      *
+      * @param Context $context
+      * @param Registry $coreRegistry
+      * @param ScopeConfigInterface $scopeConfig
+      * @param PageFactory $pageFactory
+      */
+    public function __construct(
         Context $context,
         Registry $coreRegistry,
         ScopeConfigInterface $scopeConfig,
@@ -65,11 +65,11 @@ class Popup extends Action
     }
 
     /**
-    * @param string $key
-    * @return string
-    */
+     * @param string $key
+     * @return string
+     */
     private function getIPGPAYConfig($key)
     {
-        return  $this->_scopeConfig->getValue("payment/ipgpay_gateway/$key",ScopeInterface::SCOPE_STORE);
+        return  $this->_scopeConfig->getValue("payment/ipgpay_gateway/$key", ScopeInterface::SCOPE_STORE);
     }
 }
