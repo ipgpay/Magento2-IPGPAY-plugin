@@ -8,6 +8,7 @@
 
 namespace IPGPAY\Gateway\Api;
 
+use Psr\Log\LoggerInterface;
 use \IPGPAY\Gateway\Api\Exceptions;
 
 class ParamSigner
@@ -17,13 +18,27 @@ class ParamSigner
     private $lifetime=24;
     private $signatureType='PSSHA1';
 
+    protected $_logger;
+
+    /**
+     * log injection
+     * @param Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger) {
+
+        $this->_logger = $logger;
+    }
+
     /**
      * Set the shared secret
      * @param string $secret
      */
     public function setSecret($secret)
     {
-        $this->secret=$secret;
+        $this->secret=$secret;  
+        if(!is_utf8($secret)) {  
+           $this->_logger.addError('secret is not encoding by UTF-8');
+        }        
     }
 
     /**
@@ -56,7 +71,11 @@ class ParamSigner
     public function setParam($param, $value)
     {
         if ($param!='PS_SIGNATURE') {
+
             $this->params[$param]=$value;
+            if(!is_utf8($value)) {
+                $this->_logger.addError('params['.$param.'] value is not encoding by UTF-8');
+            }
         }
     }
     
@@ -210,6 +229,29 @@ class ParamSigner
         }
         return false;
     }
+
+    public function is_utf8($value)
+    {
+        $length = strlen($value);  
+        for ($i = 0; $i < $length; $i++) {  
+            $c = ord($value[$i]);
+
+            if ($c < 0x80) $n = 0;
+            elseif (($c & 0xE0) == 0xC0) $n=1;
+            elseif (($c & 0xF0) == 0xE0) $n=2;
+            elseif (($c & 0xF8) == 0xF0) $n=3;
+            elseif (($c & 0xFC) == 0xF8) $n=4;
+            elseif (($c & 0xFE) == 0xFC) $n=5;
+            else return false; 
+
+            for ($j = 0; $j < $n; $j++) { 
+                if ((++$i == $length) || ((ord($value[$i]) & 0xC0) != 0x80))
+                return false;
+            }
+        }
+        return true;
+    }
+
     private function _checkSignatureType($value)
     {
         if ($value=='md5') {
