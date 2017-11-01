@@ -279,7 +279,7 @@ class Index extends Action
     {
         return [
             'client_id' => $this->getIPGPAYConfig('account_id'),
-            'return_url' => $this->_url->getUrl('ipgpay/land/cancel'), // return to the shop before compeleting purchase
+            'return_url' => $this->_url->getUrl('ipgpay/land/returns'),
             'approval_url' => $this->_url->getUrl('ipgpay/land/success'),
             'decline_url' => $this->_url->getUrl('ipgpay/land/cancel'),
             'test_transaction' => $this->getIPGPAYConfig('test_mode') == '1' ? '1' : '0',
