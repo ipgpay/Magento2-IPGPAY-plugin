@@ -95,6 +95,8 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
             'notify' => '0', //do not notify to avoid duplicate invoices
             'test_mode' => $this->getConfigData('test_mode')
         ]);
+        // set amount to request params
+        $capture.setAmount($amount);
 
         $orderExtraInfo = unserialize($orderExtraInfo);
         try {
