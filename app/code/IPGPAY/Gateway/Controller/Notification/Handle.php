@@ -267,12 +267,24 @@ class Handle extends Action
     private function saveNotificationToPayment()
     {
         $this->payment->setTransactionId($this->fields['trans_id']);
-        $this->payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $this->fields);
+        $this->payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $this->joinTransactionFields($this->fields));
         $this->payment->setAdditionalData(serialize($this->fields));
         $this->payment->save();
         return $this;
     }
+    /**
+     * join each field together to a string
+     * @param array $fields
+     * @return string
+     */
+    private function joinTransactionFields($fields) {
+        $result = '';
+        foreach ($fields as $key => $value) {
+            $result .= '['.$key.']->['.$value.'], ';
+        }
 
+        return $result;
+    }
     /**
      * @return string
      */
