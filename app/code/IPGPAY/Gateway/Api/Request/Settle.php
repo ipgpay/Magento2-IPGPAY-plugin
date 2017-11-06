@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Api\Request;
 
 use IPGPAY\Gateway\Api\Exceptions\InvalidRequestException;
@@ -14,7 +14,8 @@ use IPGPAY\Gateway\Api\Functions;
  * Class Settle
  * @package IPGPAY\Request
  */
-class Settle extends RequestAbstract {
+class Settle extends RequestAbstract
+{
     /**
      * @var
      */
@@ -38,7 +39,8 @@ class Settle extends RequestAbstract {
      * @param $OrderId
      * @throws InvalidRequestException
      */
-    public function setOrderId($OrderId) {
+    public function setOrderId($OrderId)
+    {
         if (!Functions::isValidSqlInt($OrderId)) {
             throw new InvalidRequestException("Invalid Order Id");
         }
@@ -51,9 +53,10 @@ class Settle extends RequestAbstract {
      *
      * @param $ShipperId
      */
-    public function setShipperId($ShipperId) {
+    public function setShipperId($ShipperId)
+    {
         if (strlen($ShipperId) > 40) {
-            $ShipperId = substr($ShipperId,0,40);
+            $ShipperId = substr($ShipperId, 0, 40);
         }
         $this->ShipperId = $ShipperId;
     }
@@ -64,9 +67,10 @@ class Settle extends RequestAbstract {
      *
      * @param $TrackId
      */
-    public function setTrackId($TrackId) {
+    public function setTrackId($TrackId)
+    {
         if (strlen($TrackId) > 40) {
-            $TrackId = substr($TrackId,0,40);
+            $TrackId = substr($TrackId, 0, 40);
         }
         $this->TrackId = $TrackId;
     }
@@ -77,7 +81,8 @@ class Settle extends RequestAbstract {
      * @param $Amount
      * @throws InvalidRequestException
      */
-    public function setAmount($Amount) {
+    public function setAmount($Amount)
+    {
         if (!Functions::isValidAmount($Amount)) {
             throw new InvalidRequestException("Invalid Settle Amount");
         }
@@ -89,7 +94,8 @@ class Settle extends RequestAbstract {
      *
      * @throws InvalidRequestException
      */
-    protected function validate() {
+    protected function validate()
+    {
         parent::validate();
         if (empty($this->OrderId)) {
             throw new InvalidRequestException("Missing Order Id");
@@ -101,8 +107,9 @@ class Settle extends RequestAbstract {
      *
      * @return array
      */
-    protected function buildRequestParams() {
-        $Request = array();
+    protected function buildRequestParams()
+    {
+        $Request = [];
         $Request['client_id'] = $this->APIClientId;
         $Request['api_key'] = $this->APIKey;
         $Request['order_id'] = $this->OrderId;
@@ -130,7 +137,8 @@ class Settle extends RequestAbstract {
      *
      * @return string
      */
-    protected function getRequestUrl() {
-        return rtrim($this->APIBaseUrl,'/').'/service/order/settle';
+    protected function getRequestUrl()
+    {
+        return rtrim($this->APIBaseUrl, '/').'/service/order/settle';
     }
 }

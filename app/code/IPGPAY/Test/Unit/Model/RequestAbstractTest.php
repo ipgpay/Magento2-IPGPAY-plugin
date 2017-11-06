@@ -14,7 +14,7 @@ use \IPGPAY\Gateway\Model\IPGPAY as IPGPAY;
 use \Magento\Payment\Model\Info as Info;
 use IPGPAY\Gateway\Api\Request\Settle as Settle;
 
-class RequestAbstractTest extends \PHPUnit\Framework\TestCase 
+class RequestAbstractTest extends \PHPUnit\Framework\TestCase
 {
     protected $model;
     /**
@@ -39,13 +39,12 @@ class RequestAbstractTest extends \PHPUnit\Framework\TestCase
         ];
         $request = new Settle($config);
         $request->sendRequest();
-
     }
 
     /**
-    * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-    * @expectedExceptionMessage  API URL is invalid
-    */
+     * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+     * @expectedExceptionMessage  API URL is invalid
+     */
     public function test_url_invaild()
     {
         $config = [
@@ -57,7 +56,6 @@ class RequestAbstractTest extends \PHPUnit\Framework\TestCase
         ];
         $request = new Settle($config);
         $request->sendRequest();
-
     }
 
     /**
@@ -75,7 +73,6 @@ class RequestAbstractTest extends \PHPUnit\Framework\TestCase
         ];
         $request = new Settle($config);
         $request->sendRequest();
-
     }
 
 
@@ -83,18 +80,16 @@ class RequestAbstractTest extends \PHPUnit\Framework\TestCase
      * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  API Key is missing.
      */
-     public function test_url_apikey_empty()
-     {
+    public function test_url_apikey_empty()
+    {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'',
-            'notify'=>'0',
-            'test_mode'=>'1',
+          'api_base_url'=>'https://www.test.com',
+          'api_client_id'=>'123456',
+          'api_key'=>'',
+          'notify'=>'0',
+          'test_mode'=>'1',
         ];
         $request = new Settle($config);
         $request->sendRequest();
-
-     }
-
+    }
 }

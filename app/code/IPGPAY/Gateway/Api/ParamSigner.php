@@ -1,12 +1,14 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 
 namespace IPGPAY\Gateway\Api;
+
+use \IPGPAY\Gateway\Api\Exceptions;
 
 class ParamSigner
 {
@@ -16,28 +18,28 @@ class ParamSigner
     private $signatureType='PSSHA1';
 
     /**
-    * Set the shared secret
-    * @param string $secret
-    */
+     * Set the shared secret
+     * @param string $secret
+     */
     public function setSecret($secret)
     {
         $this->secret=$secret;
     }
 
     /**
-    * Set the amount of time this URL will be valid for in hours.
-    * @param integer $lifetime
-    */
+     * Set the amount of time this URL will be valid for in hours.
+     * @param integer $lifetime
+     */
     public function setLifeTime($lifetime)
     {
         $this->lifetime=$lifetime;
     }
 
     /**
-    * Set the signature type
-    * @param string $signatureType 'sha1' or 'md5'
-    * @throws Exceptions\InvalidSignatureTypeException
-    */
+     * Set the signature type
+     * @param string $signatureType 'sha1' or 'md5'
+     * @throws Exceptions\InvalidSignatureTypeException
+     */
     public function setSignatureType($signatureType)
     {
         if ($this->_checkSignatureType($signatureType)) {
@@ -47,10 +49,10 @@ class ParamSigner
         }
     }
     /**
-    * Set a URL parameter
-    * @param string $param
-    * @param string $value
-    */
+     * Set a URL parameter
+     * @param string $param
+     * @param string $value
+     */
     public function setParam($param, $value)
     {
         if ($param!='PS_SIGNATURE') {
@@ -59,9 +61,9 @@ class ParamSigner
     }
     
     /**
-    * Set multple URL parameters at once using an array
-    * @param array $paramArray Associative array of parameters
-    */
+     * Set multple URL parameters at once using an array
+     * @param array $paramArray Associative array of parameters
+     */
     public function setParams($paramArray)
     {
         foreach ($paramArray as $param => $value) {
@@ -70,27 +72,27 @@ class ParamSigner
     }
 
     /**
-    * Clear the param list
-    */
+     * Clear the param list
+     */
     public function clearParams()
     {
         $this->params = [];
     }
 
     /**
-    * Get the signed query string
-    * @throws Exceptions\InvalidSignatureTypeException
-    * @return string
-    */
+     * Get the signed query string
+     * @throws Exceptions\InvalidSignatureTypeException
+     * @return string
+     */
     public function getQueryString()
     {
         return $this->getSignature(true);
     }
 
     /**
-    * Sign the params and return them
-    * @throws Exceptions\InvalidSignatureTypeException
-    */
+     * Sign the params and return them
+     * @throws Exceptions\InvalidSignatureTypeException
+     */
     public function getSignedParams()
     {
         $Sig = $this->getSignature();
@@ -98,15 +100,15 @@ class ParamSigner
     }
 
     /**
-    * Get the signature for the query string
-    * @param boolean $queryString default FALSE
-    * @throws Exceptions\InvalidSignatureTypeException
-    * @return string
-    */
+     * Get the signature for the query string
+     * @param boolean $queryString default FALSE
+     * @throws Exceptions\InvalidSignatureTypeException
+     * @return string
+     */
     public function getSignature($queryString = false)
     {
         if (empty($this->secret)) {
-            user_error("Paramsigner secret is empty!",E_USER_ERROR);
+            user_error("Paramsigner secret is empty!", E_USER_ERROR);
         }
         $this->setParam('PS_EXPIRETIME', time()+(3600*$this->lifetime));
         $this->setParam('PS_SIGTYPE', $this->signatureType);
@@ -140,13 +142,13 @@ class ParamSigner
         }
     }
     /**
-    * Generate a signed query string in one shot
-    * @param array $paramArray Associative array of name/value pairs to be signed
-    * @param string $secret The secret key for the client if not previously set.
-    * @param string $signatureType Signature type if not previously set or default, 'sha1' or 'md5'
+     * Generate a signed query string in one shot
+     * @param array $paramArray Associative array of name/value pairs to be signed
+     * @param string $secret The secret key for the client if not previously set.
+     * @param string $signatureType Signature type if not previously set or default, 'sha1' or 'md5'
      * @return string
      * @throws Exceptions\InvalidSignatureTypeException
-    */
+     */
     public function generateQueryString($paramArray, $secret = null, $signatureType = null)
     {
         if ($secret !== null) {
@@ -163,13 +165,13 @@ class ParamSigner
     }
 
     /**
-    * Generate a signed URL from an existing URL
-    * @param string $secret The secret key for the client
-    * @param string $url URL to be signed
-    * @param string $signatureType Signature type, 'sha1' (default) or 'md5'
+     * Generate a signed URL from an existing URL
+     * @param string $secret The secret key for the client
+     * @param string $url URL to be signed
+     * @param string $signatureType Signature type, 'sha1' (default) or 'md5'
      * @throws Exceptions\InvalidSignatureTypeException
      * @return string
-    */
+     */
     public function signURL($url, $secret = null, $signatureType = null)
     {
         //$p=parse_url($url);
@@ -193,9 +195,12 @@ class ParamSigner
         'fragment' => 0
         ];
         if (is_string($url) && preg_match(
-        '~^((?P<scheme>[^:/?#]+):(//))?((\3|//)?(?:(?P<user>[^:]+):(?P<pass>[^@]+)@)?(?
+            '~^((?P<scheme>[^:/?#]+):(//))?((\3|//)?(?:(?P<user>[^:]+):(?P<pass>[^@]+)@)?(?
         P<host>[^/?:#]*))(:(?P<port>\d+))?' .
-        '(?P<path>[^?#]*)(\?(?P<query>[^#]*))?(#(?P<fragment>.*))?~u', $url, $matches)) {
+            '(?P<path>[^?#]*)(\?(?P<query>[^#]*))?(#(?P<fragment>.*))?~u',
+            $url,
+            $matches
+        )) {
             foreach ($matches as $key => $value) {
                 if (!isset($keys[$key]) || empty($value)) {
                     unset($matches[$key]);

@@ -1,10 +1,10 @@
 <?php
 /**
-  * @copyright Copyright (c) 2017 IPG Group Limited
-  * All rights reserved.
-  * This software may be modified and distributed under the terms
-  * of the MIT license.  See the LICENSE.txt file for details.
-**/
+ * @copyright Copyright (c) 2017 IPG Group Limited
+ * All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE.txt file for details.
+ **/
 namespace IPGPAY\Gateway\Api\Request;
 
 use IPGPAY\Gateway\Api\Config;
@@ -16,7 +16,8 @@ use IPGPAY\Gateway\Api\Response\ResponseAbstract;
  * Class RequestAbstract
  * @package IPGPAY\Request
  */
-abstract class RequestAbstract {
+abstract class RequestAbstract
+{
     /**
      * @var string
      */
@@ -40,7 +41,7 @@ abstract class RequestAbstract {
     /**
      * @var array
      */
-    protected $RequestParams = array();
+    protected $RequestParams = [];
 
     /**
      * Build the request params
@@ -60,7 +61,8 @@ abstract class RequestAbstract {
     /**
      * @param array $config
      */
-    function __construct(array $config = array()) {
+    function __construct(array $config = [])
+    {
         if (empty($config)) {
             $this->APIBaseUrl = Config::API_BASE_URL;
             $this->APIClientId = Config::API_CLIENT_ID;
@@ -82,10 +84,11 @@ abstract class RequestAbstract {
      *
      * @throws Exceptions\InvalidRequestException
      */
-    protected function validate() {
+    protected function validate()
+    {
         if (empty($this->APIBaseUrl)) {
             throw new Exceptions\InvalidRequestException("API URL is missing.");
-        } elseif (filter_var($this->APIBaseUrl, FILTER_VALIDATE_URL) === FALSE) {
+        } elseif (filter_var($this->APIBaseUrl, FILTER_VALIDATE_URL) === false) {
             throw new Exceptions\InvalidRequestException("API URL is invalid.");
         }
 
@@ -109,7 +112,8 @@ abstract class RequestAbstract {
      * @return ResponseAbstract
      * @throws Exceptions\CommunicationException
      */
-    public function sendRequest() {
+    public function sendRequest()
+    {
         $this->validate();
         $this->buildRequestParams();
 
