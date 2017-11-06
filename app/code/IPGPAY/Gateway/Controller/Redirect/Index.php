@@ -279,7 +279,7 @@ class Index extends Action
     {
         return [
             'client_id'         => $this->getIPGPAYConfig('account_id'),
-            'return_url'        => $this->_url->getUrl('ipgpay/land/returnback'),
+            'return_url'        => $this->_url->getUrl('ipgpay/land/returns'),
             'approval_url'      => $this->_url->getUrl('ipgpay/land/success'),
             'decline_url'       => $this->_url->getUrl('ipgpay/land/decline'),
             'notification_url'  => $this->_url->getUrl('ipgpay/notification/handle'),
