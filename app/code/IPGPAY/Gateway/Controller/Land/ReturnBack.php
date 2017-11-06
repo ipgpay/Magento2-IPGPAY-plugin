@@ -10,7 +10,7 @@ namespace IPGPAY\Gateway\Controller\Land;
 use Magento\Framework\App\Action\Action;
 use Magento\Sales\Model\Order;
 
-class Return extends Action
+class ReturnBack extends Action
 {
     /**
      * Customer will be returned here if clicks return button
