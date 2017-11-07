@@ -17,7 +17,7 @@ class Decline extends Action
      */
     public function execute()
     {
-        this->_getCheckout()->restoreQuote();
+        $this->_getCheckout()->restoreQuote();
         $this->_redirect('checkout/onepage/failure');
     }
 
