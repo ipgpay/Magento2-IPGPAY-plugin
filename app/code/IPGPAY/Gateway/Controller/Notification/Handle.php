@@ -278,10 +278,12 @@ class Handle extends Action
      * @return string
      */
     private function joinTransactionFields($fields) {
-        $result = '';
+        $result = 'test value';
+        /*
         foreach ($fields as $key => $value) {
             $result .= '['.$key.']->['.$value.'], ';
         }
+        */
 
         return $result;
     }
