@@ -96,7 +96,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
             'test_mode' => $this->getConfigData('test_mode')
         ]);
         // set amount to request params
-        $capture.setAmount($amount);
+        $capture->setAmount($amount);
 
         $orderExtraInfo = unserialize($orderExtraInfo);
         try {

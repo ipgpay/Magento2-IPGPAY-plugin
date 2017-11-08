@@ -47,7 +47,6 @@ class Handle extends Action
      */
     protected $payment;
 
-
     /**
      * Constructor
      *
@@ -101,7 +100,7 @@ class Handle extends Action
                         break;
                     case Constants::TRANSACTION_MODE_SALE:
                         $this->payment->setIsTransactionClosed(true);
-                        $this->addTransaction(Payment\Transaction::TYPE_ORDER);
+                        $this->addTransaction(Payment\Transaction::TYPE_ORDER);                        
                         break;
                 }
                 $this->handleOrderNotification();
@@ -126,7 +125,8 @@ class Handle extends Action
                 break;
         }
         $this->payment->save();
-
+        $logger = $this->createObject('\Psr\Log\LoggerInterface');
+        $logger->addCritical('finally executed.....');
         //Respond with OK
         return Constants::NOTIFICATION_RESPONSE_SUCCESSFUL;
     }
@@ -267,7 +267,7 @@ class Handle extends Action
     private function saveNotificationToPayment()
     {
         $this->payment->setTransactionId($this->fields['trans_id']);
-        $this->payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $this->fields);
+        $this->payment->setTransactionAdditionalInfo(Payment\Transaction::RAW_DETAILS, $this->joinTransactionFields($this->fields));
         $this->payment->setAdditionalData(serialize($this->fields));
         $this->payment->save();
         return $this;
@@ -365,13 +365,14 @@ class Handle extends Action
 
         $comment = 'Your payment has been received';
         /** @var \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender */
-        $orderCommentSender = $this->createObject('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');
+        //$orderCommentSender = $this->createObject('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');        
 
-        $orderCommentSender->send($this->order, true, $comment);
+        //$orderCommentSender->send($this->order, true, $comment);
         $this->order->setEmailSent(true);
         $history = $this->order->addStatusHistoryComment('Payment received email sent to customer');
         $history->setIsCustomerNotified(true);
         $this->order->save();
+        
         return $this;
     }
 
