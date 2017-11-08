@@ -125,8 +125,6 @@ class Handle extends Action
                 break;
         }
         $this->payment->save();
-        $logger = $this->createObject('\Psr\Log\LoggerInterface');
-        $logger->addCritical('finally executed.....');
         //Respond with OK
         return Constants::NOTIFICATION_RESPONSE_SUCCESSFUL;
     }
@@ -365,9 +363,9 @@ class Handle extends Action
 
         $comment = 'Your payment has been received';
         /** @var \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender */
-        //$orderCommentSender = $this->createObject('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');        
+        $orderCommentSender = $this->createObject('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');        
 
-        //$orderCommentSender->send($this->order, true, $comment);
+        $orderCommentSender->send($this->order, true, $comment);
         $this->order->setEmailSent(true);
         $history = $this->order->addStatusHistoryComment('Payment received email sent to customer');
         $history->setIsCustomerNotified(true);
