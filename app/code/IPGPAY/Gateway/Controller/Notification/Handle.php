@@ -364,8 +364,8 @@ class Handle extends Action
         $comment = 'Your payment has been received';
         /** @var \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender */
         $orderCommentSender = $this->createObject('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');        
-
-        $orderCommentSender->send($this->order, true, $comment);
+        // there some bugs in magento system among 2.1, 2.2
+        //$orderCommentSender->send($this->order, true, $comment);
         $this->order->setEmailSent(true);
         $history = $this->order->addStatusHistoryComment('Payment received email sent to customer');
         $history->setIsCustomerNotified(true);
