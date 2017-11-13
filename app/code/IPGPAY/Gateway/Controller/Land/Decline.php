@@ -17,7 +17,11 @@ class Decline extends Action
      */
     public function execute()
     {
-        $this->_getCheckout()->restoreQuote();
+        $order = $this->_getCheckout()->getLastRealOrder();
+        if($order->getRealOrderId()) {
+           $order->cancel()->addStatusToHistory(Order::STATE_CANCELED, 'Gateway has declined the payment.', true);
+           $this->_getCheckout()->restoreQuote();
+        }
         $this->_redirect('checkout/onepage/failure');
     }
 
