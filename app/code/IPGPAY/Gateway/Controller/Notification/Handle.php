@@ -446,7 +446,7 @@ class Handle extends Action
         $creditMemo->setGrandTotal(abs($this->fields['amount']));
         $creditMemoService->refund($creditMemo, true);
 
-        $this->modifyOrderPayment(Constants::TRANSACTION_STATE_CREDITED, $this->order->getState());
+        $this->modifyOrderPayment(Constants::TRANSACTION_STATE_CREDITED, Order::STATE_CLOSED);
         return $this;
     }
 
