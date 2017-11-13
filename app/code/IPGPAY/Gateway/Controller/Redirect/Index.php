@@ -66,15 +66,15 @@ class Index extends Action
             $this->getCustomerParameters($order),
             $this->getOrderItemsParameters($order),
             $this->getGatewayParameters($order)
-        );
-        
+        );        
+
         $this ->_isUsePopup =$this->getIPGPAYConfig('use_popup');
         if ($this ->_isUsePopup) {
             $signatureLifetime = $this->getIPGPAYConfig('request_expiry');
             if (!$signatureLifetime) {
                 $signatureLifetime = Config::DEFAULT_SIGNATURE_LIFETIME;
             }
-    
+
             $paramSigner = new ParamSigner();
             $paramSigner->setSecret($this->getIPGPAYConfig('secret_key'));
             $paramSigner->setLifeTime($signatureLifetime);
@@ -83,7 +83,6 @@ class Index extends Action
             $sigstring = $paramSigner->generateQueryString($formSubmissionParameters);
     
             $paymentFormUrl = $this->getPaymentFormUrl() . "?" . $sigstring;
-
             /**
              * @var \Magento\Framework\Controller\Result\Json $resultJson
              */

@@ -8,7 +8,6 @@
 
 namespace IPGPAY\Gateway\Api;
 
-use Psr\Log\LoggerInterface;
 use \IPGPAY\Gateway\Api\Exceptions;
 
 class ParamSigner
@@ -24,9 +23,9 @@ class ParamSigner
      * log injection
      * @param Psr\Log\LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger) {
+    public function __construct() {
 
-        $this->_logger = $logger;
+        $this->_logger = \Magento\Framework\App\ObjectManager::getInstance()->get('\Psr\Log\LoggerInterface');
     }
 
     /**
@@ -36,9 +35,9 @@ class ParamSigner
     public function setSecret($secret)
     {
         $this->secret=$secret;  
-        if(!is_utf8($secret)) {  
-           $this->_logger.addError('secret is not encoding by UTF-8');
-        }        
+        if(!$this->is_utf8($secret)) {  
+           $this->_logger->addError('secret is not encoding by UTF-8');
+        }      
     }
 
     /**
@@ -60,6 +59,7 @@ class ParamSigner
         if ($this->_checkSignatureType($signatureType)) {
             $this->signatureType=$signatureType;
         } else {
+            $this->_logger->addError('Invalid signatureType');
             throw new Exceptions\InvalidSignatureTypeException("Invalid signatureType : $signatureType");
         }
     }
@@ -73,8 +73,8 @@ class ParamSigner
         if ($param!='PS_SIGNATURE') {
 
             $this->params[$param]=$value;
-            if(!is_utf8($value)) {
-                $this->_logger.addError('params['.$param.'] value is not encoding by UTF-8');
+            if(!$this->is_utf8($value)) {
+                $this->_logger->addError('params['.$param.'] value is not encoding by UTF-8');
             }
         }
     }
@@ -152,6 +152,7 @@ class ParamSigner
                 $signature=sha1($sigstring);
                 break;
             default:
+                $this->_logger->addError('Unknown key signatureType');
                 throw new Exceptions\InvalidSignatureTypeException('Unknown key signatureType');
         }
         if ($queryString) {
@@ -180,6 +181,7 @@ class ParamSigner
         foreach ($paramArray as $name => $value) {
             $this->setParam($name, $value);
         }
+
         return $this->getQueryString();
     }
 
