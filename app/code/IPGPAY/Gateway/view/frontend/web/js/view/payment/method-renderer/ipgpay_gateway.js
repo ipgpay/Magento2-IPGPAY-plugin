@@ -80,18 +80,20 @@ define(
                                             isPaymentSuccess = true;
                                             break;
                                         case 'PuPayment_Decline':
-                                            window.location.replace(url.build('ipgpay/land/cancel'));
+                                            window.location.replace(url.build('ipgpay/land/decline'));                                            
+                                            closeModal();
                                             break;
                                         case 'PuPayment_Error':
-                                            window.location.replace(url.build('ipgpay/land/cancel'));
+                                            window.location.replace(url.build('ipgpay/land/decline'));                                            
+                                            closeModal();
                                             break;
                                         case 'PuPayment_Close':
-                                            closeModal();
                                             if (isPaymentSuccess) {
                                                 window.location.replace(url.build('ipgpay/land/success'));
                                             } else {
-                                                window.location.replace(url.build('ipgpay/land/cancel'));
-                                            }
+                                                window.location.replace(url.build('ipgpay/land/returns'));
+                                            }                                            
+                                            closeModal();
                                             break;
                                     }
                                     return true;
@@ -103,7 +105,7 @@ define(
                                 if (isPaymentSuccess) {
                                     window.location.replace(url.build('ipgpay/land/success'));
                                 } else {
-                                    window.location.replace(url.build('ipgpay/land/cancel'));
+                                    window.location.replace(url.build('ipgpay/land/returns'));
                                 }
                                 closeModal();
                             }
