@@ -74,6 +74,7 @@ define(
                             var isPaymentSuccess = false;
                             //add postmessage listener
                             window.addEventListener('message', function (e) {
+                                console.log(e);
                                 if (data.indexOf(e.origin)>=0) {
                                     switch (e.data.action) {
                                         case 'PuPayment_Success':

@@ -85,6 +85,8 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
      */
     public function capture(Model\InfoInterface $payment, $amount)
     {
+        $logger = \Magento\Framework\App\ObjectManager::getInstance()->get('\Psr\Log\LoggerInterface');
+        $logger->addCritical('test capture to .....');
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
         
@@ -180,7 +182,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
         try {
             $credit->setOrderId($orderExtraInfo['order_id']);
             $transId = $payment->getParentTransactionId();
-            $logger.addCritical('parent transaction id = '. $transId);
+            $logger->addCritical('parent transaction id = '. $transId);
             $credit->setTransId($transId);
             $credit->setAmount($amount);
             $res = $credit->sendRequest();

@@ -60,7 +60,8 @@ class Index extends Action
      *
      */
     public function execute()
-    {
+    {        
+        $this ->_isUsePopup = $this->getIPGPAYConfig('use_popup');
         $order = $this->_getCheckout()->getLastRealOrder();
         $formSubmissionParameters = $this->mergeFormParameters(
             $this->getCustomerParameters($order),
@@ -68,7 +69,6 @@ class Index extends Action
             $this->getGatewayParameters($order)
         );        
 
-        $this ->_isUsePopup =$this->getIPGPAYConfig('use_popup');
         if ($this ->_isUsePopup) {
             $signatureLifetime = $this->getIPGPAYConfig('request_expiry');
             if (!$signatureLifetime) {
@@ -274,21 +274,35 @@ class Index extends Action
      * @param Order $order
      * @return array
      */
-    private function getGatewayParameters(Order $order)
+    private function getGatewayParameters(Order $order)    
     {
-        return [
-            'client_id'         => $this->getIPGPAYConfig('account_id'),
-            'return_url'        => $this->_url->getUrl('ipgpay/land/returns'),
-            'approval_url'      => $this->_url->getUrl('ipgpay/land/success'),
-            'decline_url'       => $this->_url->getUrl('ipgpay/land/decline'),
-            'notification_url'  => $this->_url->getUrl('ipgpay/notification/handle'),
-            'test_transaction'  => $this->getIPGPAYConfig('test_mode') == '1' ? '1' : '0',
-            'order_reference'   => $order->getIncrementId(),
-            'order_currency'    => $order->getOrderCurrencyCode(),
-            'form_id'           => $this->getIPGPAYConfig('payment_form_id'),
-            'merchant_name'     => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
-            'create_customer'   => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0'
-        ];
+        if($this ->_isUsePopup) {
+            return [
+                'client_id'         => $this->getIPGPAYConfig('account_id'),
+                'notification_url'  => $this->_url->getUrl('ipgpay/notification/handle'),
+                'test_transaction'  => $this->getIPGPAYConfig('test_mode') == '1' ? '1' : '0',
+                'order_reference'   => $order->getIncrementId(),
+                'order_currency'    => $order->getOrderCurrencyCode(),
+                'form_id'           => $this->getIPGPAYConfig('payment_form_id'),
+                'merchant_name'     => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
+                'create_customer'   => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0'
+            ];
+        }
+        else {
+            return [
+                'client_id'         => $this->getIPGPAYConfig('account_id'),
+                'return_url'        => $this->_url->getUrl('ipgpay/land/returns'),
+                'approval_url'      => $this->_url->getUrl('ipgpay/land/success'),
+                'decline_url'       => $this->_url->getUrl('ipgpay/land/decline'),
+                'notification_url'  => $this->_url->getUrl('ipgpay/notification/handle'),
+                'test_transaction'  => $this->getIPGPAYConfig('test_mode') == '1' ? '1' : '0',
+                'order_reference'   => $order->getIncrementId(),
+                'order_currency'    => $order->getOrderCurrencyCode(),
+                'form_id'           => $this->getIPGPAYConfig('payment_form_id'),
+                'merchant_name'     => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
+                'create_customer'   => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0'
+            ];
+        }        
     }
 
     /**
