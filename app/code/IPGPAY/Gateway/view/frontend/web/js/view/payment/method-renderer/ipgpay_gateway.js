@@ -72,6 +72,8 @@ define(
                             openModal();
                             
                             var isPaymentSuccess = false;
+                            var isPaymentDecline = false;
+                            var isPaymentError   = false;
                             //add postmessage listener
                             window.addEventListener('message', function (e) {
                                 console.log(e);
@@ -81,19 +83,14 @@ define(
                                             isPaymentSuccess = true;
                                             break;
                                         case 'PuPayment_Decline':
-                                            closeModal();
-                                            window.location.replace(url.build('ipgpay/land/decline'));                                            
+                                            isPaymentDecline = true;
                                             break;
-                                        case 'PuPayment_Error':                                        
-                                            window.location.replace(url.build('ipgpay/land/decline'));                                            
+                                        case 'PuPayment_Error':   
+                                            isPaymentError = true;                                         
                                             break;
-                                        case 'PuPayment_Close':
-                                            if (isPaymentSuccess) {
-                                                window.location.replace(url.build('ipgpay/land/success'));
-                                            } else {
-                                                window.location.replace(url.build('ipgpay/land/returns'));
-                                            }                                            
+                                        case 'PuPayment_Close':                                                                      
                                             closeModal();
+                                            processLandUrl();
                                             break;
                                     }
                                     return true;
@@ -102,12 +99,23 @@ define(
                             
                             function closeAndRedirect()
                             {
+                                closeModal();
+                                processLandUrl();
+                            }
+
+                            function processLandUrl()
+                            {
                                 if (isPaymentSuccess) {
                                     window.location.replace(url.build('ipgpay/land/success'));
+                                } 
+                                else if(isPaymentDecline) {
+                                    window.location.replace(url.build('ipgpay/land/decline'));
+                                }
+                                else if(isPaymentError) {
+                                    window.location.replace(url.build('ipgpay/land/decline'));
                                 } else {
                                     window.location.replace(url.build('ipgpay/land/returns'));
-                                }
-                                closeModal();
+                                }          
                             }
 
                             function openModal()
