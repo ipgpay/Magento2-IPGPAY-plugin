@@ -80,12 +80,11 @@ define(
                                             isPaymentSuccess = true;
                                             break;
                                         case 'PuPayment_Decline':
-                                            window.location.replace(url.build('ipgpay/land/decline'));                                            
                                             closeModal();
+                                            window.location.replace(url.build('ipgpay/land/decline'));                                            
                                             break;
-                                        case 'PuPayment_Error':
+                                        case 'PuPayment_Error':                                        
                                             window.location.replace(url.build('ipgpay/land/decline'));                                            
-                                            closeModal();
                                             break;
                                         case 'PuPayment_Close':
                                             if (isPaymentSuccess) {

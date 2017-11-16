@@ -163,6 +163,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
      */
     public function refund(Model\InfoInterface $payment, $amount)
     {
+        $logger = \Magento\Framework\App\ObjectManager::getInstance()->get('\Psr\Log\LoggerInterface');
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
 
@@ -178,7 +179,9 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
 
         try {
             $credit->setOrderId($orderExtraInfo['order_id']);
-            $credit->setTransId($payment->getParentTransactionId());
+            $transId = $payment->getParentTransactionId();
+            $logger.addCritical('parent transaction id = '. $transId);
+            $credit->setTransId($transId);
             $credit->setAmount($amount);
             $res = $credit->sendRequest();
 
