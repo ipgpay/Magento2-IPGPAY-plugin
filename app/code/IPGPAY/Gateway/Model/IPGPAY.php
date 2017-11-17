@@ -37,7 +37,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
      *
      * @var bool
      */
-    protected $_isOffline = true;
+    protected $_isOffline = false;
 
     /**
      * @var bool
@@ -84,9 +84,7 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
      * @throws Exception\PaymentException
      */
     public function capture(Model\InfoInterface $payment, $amount)
-    {
-        $logger = \Magento\Framework\App\ObjectManager::getInstance()->get('\Psr\Log\LoggerInterface');
-        $logger->addCritical('test capture to .....');
+    {        
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
         
@@ -182,7 +180,10 @@ class IPGPAY extends Model\Method\AbstractMethod implements MethodInterface
         try {
             $credit->setOrderId($orderExtraInfo['order_id']);
             $transId = $payment->getParentTransactionId();
-            $logger->addCritical('parent transaction id = '. $transId);
+
+            if(!isset($transId)) {
+                $logger->addCritical('get parent transaction id by other ways', $orderExtraInfo);                
+            }            
             $credit->setTransId($transId);
             $credit->setAmount($amount);
             $res = $credit->sendRequest();
