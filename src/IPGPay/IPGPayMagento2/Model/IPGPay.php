@@ -37,7 +37,7 @@ class IPGPay extends Model\Method\AbstractMethod implements MethodInterface
      *
      * @var bool
      */
-    protected $_isOffline = true;
+    protected $_isOffline = false;
 
     /**
      * @var bool
@@ -84,7 +84,7 @@ class IPGPay extends Model\Method\AbstractMethod implements MethodInterface
      * @throws Exception\PaymentException
      */
     public function capture(Model\InfoInterface $payment, $amount)
-    {
+    {        
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
         
@@ -163,6 +163,7 @@ class IPGPay extends Model\Method\AbstractMethod implements MethodInterface
      */
     public function refund(Model\InfoInterface $payment, $amount)
     {
+        $logger = \Magento\Framework\App\ObjectManager::getInstance()->get('\Psr\Log\LoggerInterface');
         $orderExtraInfo = $payment->getAdditionalData();
         $this->validateOrderExtraInfo($orderExtraInfo);
 
@@ -178,7 +179,12 @@ class IPGPay extends Model\Method\AbstractMethod implements MethodInterface
 
         try {
             $credit->setOrderId($orderExtraInfo['order_id']);
-            $credit->setTransId($payment->getParentTransactionId());
+            $transId = $payment->getParentTransactionId();
+
+            if(!isset($transId)) {
+                $logger->addCritical('get parent transaction id by other ways', $orderExtraInfo);                
+            }            
+            $credit->setTransId($transId);
             $credit->setAmount($amount);
             $res = $credit->sendRequest();
 

@@ -28,6 +28,7 @@ class ParamSigner
     public function __construct(Log\LoggerInterface $logger) {
 
         $this->_logger = \Magento\Framework\App\ObjectManager::getInstance()->get('\Psr\Log\LoggerInterface');
+        $this->_logger->addCritical('ParamSigner initialise.....');
     }
 
     /**
