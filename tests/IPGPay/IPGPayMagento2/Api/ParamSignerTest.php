@@ -1,11 +1,11 @@
 <?php
 
-namespace IPGPay\Test\Unit\Api;
+namespace IPGPAY\Test\Unit\API;
 
 use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use \IPGPay\IPGPayMagento2\Api\ParamSigner as ParamSigner;
+use \IPGPAY\IPGPAYMagento2\API\ParamSigner as ParamSigner;
 
 class ParamSignerTest extends TestCase
 {

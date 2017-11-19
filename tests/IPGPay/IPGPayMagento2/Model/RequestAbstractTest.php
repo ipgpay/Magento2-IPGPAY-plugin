@@ -8,11 +8,10 @@
  * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
  * For further information, please contact the copyright owner by email copyright@ipgholdings.net
  **/
-namespace IPGPay\Test\Unit\Model;
+namespace IPGPAY\Test\Unit\Model;
 
-use \IPGPay\IPGPayMagento2\Model\IPGPay as IPGPay;
 use PHPUnit\Framework\TestCase;
-use IPGPay\IPGPayMagento2\Api\Request\Settle as Settle;
+use IPGPAY\IPGPAYMagento2\API\Request\Settle as Settle;
 
 class RequestAbstractTest extends TestCase
 {
@@ -25,7 +24,7 @@ class RequestAbstractTest extends TestCase
     }
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  API URL is missing
      */
     public function test_url_empty()
@@ -42,7 +41,7 @@ class RequestAbstractTest extends TestCase
     }
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  API URL is invalid
      */
     public function test_url_invaild()
@@ -59,7 +58,7 @@ class RequestAbstractTest extends TestCase
     }
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  API Client Id is missing
      */
     public function test_url_clientId_empty()
@@ -77,7 +76,7 @@ class RequestAbstractTest extends TestCase
 
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  API Key is missing.
      */
     public function test_url_apikey_empty()

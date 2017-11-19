@@ -1,0 +1,10 @@
+{
+  "name": "ipgpay/ipgpay-magento2-payment-module",
+  "description": "Integration with IPGPAY Gateway",
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "autoload": {
+    "psr-4": { "IPGPAY\\IPGPAYMagento2\\": "" },
+    "files": [ "registration.php" ]
+  }
+}

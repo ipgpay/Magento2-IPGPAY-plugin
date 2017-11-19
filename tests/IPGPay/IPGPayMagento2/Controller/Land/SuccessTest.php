@@ -1,7 +1,7 @@
 <?php
-namespace IPGPay\Test\Unit\Controller\Land;
+namespace IPGPAY\Test\Unit\Controller\Land;
 
-use IPGPay\IPGPayMagento2\Controller\Land\Success as Success;
+use IPGPAY\IPGPAYMagento2\Controller\Land\Success as Success;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

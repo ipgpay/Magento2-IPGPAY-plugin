@@ -1,7 +1,7 @@
 <?php
-namespace IPGPay\Test\Unit\Controller\Notification;
+namespace IPGPAY\Test\Unit\Controller\Notification;
 
-use IPGPay\IPGPayMagento2\Controller\Notification\Handle as Handle;
+use IPGPAY\IPGPAYMagento2\Controller\Notification\Handle as Handle;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -34,7 +34,7 @@ class HandleTest extends TestCase
         ->disableOriginalConstructor()
         ->getMock();
 
-        $this->paymentMock = $this -> getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+        $this->paymentMock = $this -> getMockBuilder(\Magento\Sales\API\Data\OrderInterface::class)
         ->disableOriginalConstructor()
         ->getMock();
 

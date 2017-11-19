@@ -8,11 +8,10 @@
  * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
  * For further information, please contact the copyright owner by email copyright@ipgholdings.net
  **/
-namespace IPGPay\Test\Unit\Model;
+namespace IPGPAY\Test\Unit\Model;
 
-use \IPGPay\IPGPayMagento2\Model\IPGPay as IPGPay;
 use PHPUnit\Framework\TestCase;
-use \IPGPay\IPGPayMagento2\Api\Request\Settle as Settle;
+use \IPGPAY\IPGPAYMagento2\API\Request\Settle as Settle;
 
 class SettleTest extends TestCase
 {
@@ -33,7 +32,7 @@ class SettleTest extends TestCase
     }
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  Invalid Order Id
      */
     public function test_orderId_empty()
@@ -54,7 +53,7 @@ class SettleTest extends TestCase
     }
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  Invalid Order Id
      */
     public function test_url_invalidOrderId()

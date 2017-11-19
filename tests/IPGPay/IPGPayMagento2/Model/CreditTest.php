@@ -8,11 +8,10 @@
  * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
  * For further information, please contact the copyright owner by email copyright@ipgholdings.net
  **/
-namespace IPGPay\Test\Unit\Model;
+namespace IPGPAY\Test\Unit\Model;
 
-use \IPGPay\IPGPayMagento2\Model\IPGPay as IPGPay;
 use PHPUnit\Framework\TestCase;
-use \IPGPay\IPGPayMagento2\Api\Request\Credit as Credit;
+use \IPGPAY\IPGPAYMagento2\API\Request\Credit as Credit;
 
 class CreditTest extends TestCase
 {
@@ -33,7 +32,7 @@ class CreditTest extends TestCase
     }
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  Invalid Order Id
      */
     public function test_orderId_empty()
@@ -53,7 +52,7 @@ class CreditTest extends TestCase
     }
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  Invalid Order Id
      */
     public function test_url_invalidOrderId()
@@ -74,7 +73,7 @@ class CreditTest extends TestCase
 
     
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  Missing Trans Id
      */
     public function test_url_transId_empty()
@@ -95,7 +94,7 @@ class CreditTest extends TestCase
 
 
     /**
-     * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+     * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  Invalid Trans Id
      */
     public function test_url_invalidTransId()
@@ -115,7 +114,7 @@ class CreditTest extends TestCase
     }
 
      /**
-      * @expectedException \IPGPay\IPGPayMagento2\Api\Exceptions\InvalidRequestException
+      * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
       * @expectedExceptionMessage  Invalid Credit Amount
       */
     public function test_url_invalidAmount()

@@ -1,7 +1,7 @@
 <?php
-namespace IPGPay\Test\Unit\Controller\Redirect;
+namespace IPGPAY\Test\Unit\Controller\Redirect;
 
-use IPGPay\IPGPayMagento2\Controller\Redirect\Index as Index;
+use IPGPAY\IPGPAYMagento2\Controller\Redirect\Index as Index;
 use Magento\Authorizenet\Controller\Directpost\Payment\Redirect;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ViewInterface;

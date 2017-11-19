@@ -1,6 +1,6 @@
 {
   "name": "ipgpay/ipgpay-magento2-payment-module",
-  "description": "IPGPay payment gateway implementation for Magento2",
+  "description": "IPGPAY payment gateway implementation for Magento2",
   "type": "library",
   "keywords": [
     "ipgpay",
