@@ -84,5 +84,5 @@ class Constants
     /**
      * @var array
      */
-    public static $ThreeDecimalCurrencies = ["KWD","OMR","BHD"];
+    public static $ThreeDecimalCurrencies = ["KWD", "OMR", "BHD"];
 }

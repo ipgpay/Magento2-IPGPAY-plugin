@@ -7,8 +7,8 @@
  **/
 namespace IPGPAY\Gateway\Block;
 
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Class Redirect
