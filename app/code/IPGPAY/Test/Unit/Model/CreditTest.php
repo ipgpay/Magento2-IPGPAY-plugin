@@ -10,9 +10,9 @@
  **/
 namespace IPGPAY\Test\Unit\Model;
 
+use \IPGPAY\Gateway\Api\Request\Credit as Credit;
 use \IPGPAY\Gateway\Model\IPGPAY as IPGPAY;
 use \Magento\Payment\Model\Info as Info;
-use \IPGPAY\Gateway\Api\Request\Credit as Credit;
 
 class CreditTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,11 +23,11 @@ class CreditTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $config = [
-            'api_base_url'=>'https://my.ipgholdings.net',
-            'api_client_id'=>'4003442',
-            'api_key'=>'xYKifLzembIHivJFJveO',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://my.ipgholdings.net',
+            'api_client_id' => '4003442',
+            'api_key'       => 'xYKifLzembIHivJFJveO',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $this->model = new Credit($config);
     }
@@ -39,11 +39,11 @@ class CreditTest extends \PHPUnit\Framework\TestCase
     public function test_orderId_empty()
     {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $credit = new Credit($config);
         $credit->setOrderId(null);
@@ -59,11 +59,11 @@ class CreditTest extends \PHPUnit\Framework\TestCase
     public function test_url_invalidOrderId()
     {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $credit = new Credit($config);
         $credit->setOrderId('test');
@@ -72,7 +72,6 @@ class CreditTest extends \PHPUnit\Framework\TestCase
         $credit->sendRequest();
     }
 
-    
     /**
      * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
      * @expectedExceptionMessage  Missing Trans Id
@@ -80,11 +79,11 @@ class CreditTest extends \PHPUnit\Framework\TestCase
     public function test_url_transId_empty()
     {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $credit = new Credit($config);
         $credit->setOrderId('12345');
@@ -92,7 +91,6 @@ class CreditTest extends \PHPUnit\Framework\TestCase
         $credit->setAmount('123456');
         $credit->sendRequest();
     }
-
 
     /**
      * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
@@ -101,11 +99,11 @@ class CreditTest extends \PHPUnit\Framework\TestCase
     public function test_url_invalidTransId()
     {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $credit = new Credit($config);
         $credit->setOrderId('12345');
@@ -114,18 +112,18 @@ class CreditTest extends \PHPUnit\Framework\TestCase
         $credit->sendRequest();
     }
 
-     /**
-      * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
-      * @expectedExceptionMessage  Invalid Credit Amount
-      */
+    /**
+     * @expectedException \IPGPAY\Gateway\Api\Exceptions\InvalidRequestException
+     * @expectedExceptionMessage  Invalid Credit Amount
+     */
     public function test_url_invalidAmount()
     {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $credit = new Credit($config);
         $credit->setOrderId('12345');
@@ -134,18 +132,17 @@ class CreditTest extends \PHPUnit\Framework\TestCase
         $credit->sendRequest();
     }
 
-
-     /**
-      * @test
-      */
+    /**
+     * @test
+     */
     public function test_default_credit()
     {
         $config = [
-            'api_base_url'=>'https://my.ipgholdings.net',
-            'api_client_id'=>'4003442',
-            'api_key'=>'xYKifLzembIHivJFJveO',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://my.ipgholdings.net',
+            'api_client_id' => '4003442',
+            'api_key'       => 'xYKifLzembIHivJFJveO',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $this->model = new Credit($config);
         $this->model->setOrderId('123456');

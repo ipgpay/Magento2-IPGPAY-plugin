@@ -7,13 +7,11 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use \Magento\Framework\Controller\ResultFactory;
 
 class RedirectTest extends \PHPUnit\Framework\TestCase
 {
 
-         
     protected $objectManager;
     protected $checkoutSessionMock;
     protected $controller;
@@ -31,37 +29,36 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
-        $this->orderAddressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+        $this->orderMock           = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->orderAddressMock    = $this->createMock(\Magento\Sales\Model\Order\Address::class);
         $this->shippingAddressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
-        $this->orderItemMock = $this->createMock(\Magento\Sales\Model\Order\Item::class);
-        $this->scoreConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->orderItemMock       = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+        $this->scoreConfigMock     = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $this->resultFactory =  $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
-        $this->jsonResut =  $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->jsonResut     = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $this->resultFactory->expects($this->once())
-        ->method('create')
-        ->will($this->returnValue($this->jsonResut));
+            ->method('create')
+            ->will($this->returnValue($this->jsonResut));
 
         $this->checkoutSessionMock = $this
-        ->getMockBuilder(\Magento\Checkout\Model\Session::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->getMockBuilder(\Magento\Checkout\Model\Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->checkoutSessionMock ->expects(static::once())
-        ->method('getLastRealOrder')
-        ->willReturn($this->orderMock);
-        ;
+        $this->checkoutSessionMock->expects(static::once())
+            ->method('getLastRealOrder')
+            ->willReturn($this->orderMock);
 
-        $this->redirectObjectManger = $this-> getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+        $this->redirectObjectManger = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->redirectObjectManger ->expects(static::any())
-        ->method('get')
-        ->with('Magento\Checkout\Model\Session')
-        ->willReturn($this->checkoutSessionMock);
-        
+        $this->redirectObjectManger->expects(static::any())
+            ->method('get')
+            ->with('Magento\Checkout\Model\Session')
+            ->willReturn($this->checkoutSessionMock);
+
         $this->request = static::getMockForAbstractClass(RequestInterface::class);
 
         $this->view = static::getMockForAbstractClass(ViewInterface::class);
@@ -72,15 +69,15 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->controller = $objectManager->getObject(Index::class, [
-            'request' => $this->request,
-            'view' => $this->view,
-            'coreRegistry' => $this->coreRegistry,
-            'scopeConfig' => $this->scoreConfigMock,
-            'resultFactory' => $this->resultFactory,
-            '_objectManager' => $this->redirectObjectManger
+            'request'        => $this->request,
+            'view'           => $this->view,
+            'coreRegistry'   => $this->coreRegistry,
+            'scopeConfig'    => $this->scoreConfigMock,
+            'resultFactory'  => $this->resultFactory,
+            '_objectManager' => $this->redirectObjectManger,
         ]);
     }
- 
+
     /**
      * @test
      */
@@ -88,7 +85,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderAddressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
-            ['getFirstname','getLastname','getCompany','getCity','getRegion','getPostcode','getCountryId','getEmail','getTelephone']
+            ['getFirstname', 'getLastname', 'getCompany', 'getCity', 'getRegion', 'getPostcode', 'getCountryId', 'getEmail', 'getTelephone']
         );
 
         $this->orderAddressMock->expects($this->at(0))->method('getFirstname')->will($this->returnValue('firstname'));
@@ -101,7 +98,6 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         $this->orderAddressMock->expects($this->at(7))->method('getEmail')->will($this->returnValue('email'));
         $this->orderAddressMock->expects($this->at(8))->method('getTelephone')->will($this->returnValue('telephone'));
 
-        
         $this->shippingAddressMock->expects($this->at(0))->method('getFirstname')->will($this->returnValue('firstname'));
         $this->shippingAddressMock->expects($this->at(1))->method('getLastname')->will($this->returnValue('lastname'));
         $this->shippingAddressMock->expects($this->at(2))->method('getCompany')->will($this->returnValue('company'));
@@ -112,13 +108,12 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         $this->shippingAddressMock->expects($this->at(7))->method('getEmail')->will($this->returnValue('email'));
         $this->shippingAddressMock->expects($this->at(8))->method('getTelephone')->will($this->returnValue('telephone'));
 
-        
         $this->orderMock->expects($this->at(0))->method('getBillingAddress')->will($this->returnValue($this->orderAddressMock));
         $this->orderMock->expects($this->at(1))->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $this->orderMock->expects($this->at(4))->method('getAllItems')->will($this->returnValue([$this->orderItemMock]));
         $this->orderMock->expects($this->at(5))->method('getIncrementId')->will($this->returnValue('123456'));
         $this->orderMock->expects($this->at(6))->method('getOrderCurrencyCode')->will($this->returnValue('USD'));
-        
+
         $this->scoreConfigMock->expects($this->at(0))->method('getValue')->with('payment/ipgpay_gateway/account_id', 'store')->will($this->returnValue('123456'));
         $this->scoreConfigMock->expects($this->at(1))->method('getValue')->with('payment/ipgpay_gateway/test_mode', 'store')->will($this->returnValue(1));
         $this->scoreConfigMock->expects($this->at(2))->method('getValue')->with('payment/ipgpay_gateway/payment_form_id', 'store')->will($this->returnValue('123456'));
@@ -127,10 +122,10 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
         $this->scoreConfigMock->expects($this->at(5))->method('getValue')->with('payment/ipgpay_gateway/request_expiry', 'store')->will($this->returnValue(24));
         $this->scoreConfigMock->expects($this->at(6))->method('getValue')->with('payment/ipgpay_gateway/secret_key', 'store')->will($this->returnValue('123456'));
         $this->scoreConfigMock->expects($this->at(7))->method('getValue')->with('payment/ipgpay_gateway/payment_form_url', 'store')->will($this->returnValue('payment.ipgholdings.net'));
-        
+
         $this->jsonResut->expects($this->once(0))
-        ->method('setData')
-        ->with($this->stringContains('client_id=123456&create_customer=1&customer_address=&customer_address2=&customer_city=city&customer_company=company&customer_country=countryid&customer_email=email&customer_first_name=firstname&customer_last_name=lastname&customer_phone=telephone&customer_postcode=postcode&customer_state=region&form_id=123456&merchant_name=name&order_currency=USD&order_reference=123456&shipping_city=city&shipping_company=company&shipping_country=countryid&shipping_email=email&shipping_first_name=firstname&shipping_last_name=lastname&shipping_phone=telephone&shipping_postcode=postcode&shipping_state=region&test_transaction=1'));
+            ->method('setData')
+            ->with($this->stringContains('client_id=123456&create_customer=1&customer_address=&customer_address2=&customer_city=city&customer_company=company&customer_country=countryid&customer_email=email&customer_first_name=firstname&customer_last_name=lastname&customer_phone=telephone&customer_postcode=postcode&customer_state=region&form_id=123456&merchant_name=name&order_currency=USD&order_reference=123456&shipping_city=city&shipping_company=company&shipping_country=countryid&shipping_email=email&shipping_first_name=firstname&shipping_last_name=lastname&shipping_phone=telephone&shipping_postcode=postcode&shipping_state=region&test_transaction=1'));
         $this->controller->execute();
     }
 }
