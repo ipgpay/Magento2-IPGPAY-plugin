@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nonamespaceschemalocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceblock name="checkout.root">
+        <referenceBlock name="checkout.root">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">
                     <item name="components" xsi:type="array">
@@ -10,9 +10,7 @@
                                 <item name="steps" xsi:type="array">
                                     <item name="children" xsi:type="array">
                                         <item name="billing-step" xsi:type="array">
-                                            <item name="component" xsi:type="string">
-                                                uiComponent
-                                            </item>
+                                            <item name="component" xsi:type="string">uiComponent</item>
                                             <item name="children" xsi:type="array">
                                                 <item name="payment" xsi:type="array">
                                                     <item name="children" xsi:type="array">
@@ -33,15 +31,12 @@
                                                             <item name="children" xsi:type="array">
                                                                 <item name="ipgpay_gateway" xsi:type="array">
                                                                     <!-- Example of value: Magento_Authorizenet/js/view/payment/authorizenet-->
-                                                                    <item name="component" xsi:type="string">
-                                                                        IPGPAY_Gateway/js/view/payment/ipgpay_gateway
-                                                                    </item>
+                                                                    <item name="component" xsi:type="string">IPGPAY_Gateway/js/view/payment/ipgpay_gateway</item>
                                                                     <item name="methods" xsi:type="array">
+
                                                                         <!-- Add this if your payment method requires entering a billing address-->
                                                                         <item name="ipgpay_gateway" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">
-                                                                                true
-                                                                            </item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>
                                                                 </item>
@@ -71,6 +66,6 @@
                     </item>
                 </argument>
             </arguments>
-        </referenceblock>
+        </referenceBlock>
     </body>
 </page>
