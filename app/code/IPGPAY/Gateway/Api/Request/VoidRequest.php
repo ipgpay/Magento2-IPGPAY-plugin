@@ -73,10 +73,10 @@ class VoidRequest extends RequestAbstract
      */
     protected function buildRequestParams()
     {
-        $Request = [];
+        $Request              = [];
         $Request['client_id'] = $this->APIClientId;
-        $Request['api_key'] = $this->APIKey;
-        $Request['order_id'] = $this->OrderId;
+        $Request['api_key']   = $this->APIKey;
+        $Request['order_id']  = $this->OrderId;
         if (!empty($this->Reason)) {
             $Request['reason'] = $this->Reason;
         }
@@ -97,6 +97,6 @@ class VoidRequest extends RequestAbstract
      */
     protected function getRequestUrl()
     {
-        return rtrim($this->APIBaseUrl, '/').'/service/order/void';
+        return rtrim($this->APIBaseUrl, '/') . '/service/order/void';
     }
 }

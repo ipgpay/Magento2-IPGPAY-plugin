@@ -10,21 +10,23 @@ namespace IPGPAY\Gateway\Controller\Land;
 use Magento\Framework\App\Action\Action;
 use Magento\Sales\Model\Order;
 
-class Cancel extends Action
+class Decline extends Action
 {
     /**
-     * Customer will be returned here if payment is unsuccessful
+     * Customer will be returned here if payment is declined
      */
     public function execute()
     {
         $order = $this->_getCheckout()->getLastRealOrder();
-        if ($order->getRealOrderId()) {
-            // Flag the order as 'cancelled'
-            $order->cancel()
-                ->addStatusToHistory(Order::STATE_CANCELED, 'Gateway has declined the payment.', true);
+        if (!empty($order)) {
+            if ($order->getRealOrderId()) {
+                if ($order->getState() != Order::STATE_COMPLETE) {
+                    $order->cancel()->addStatusToHistory(Order::STATE_CANCELED, 'Gateway has declined the payment.', true);
+                }
+            }
         }
         $this->_getCheckout()->restoreQuote();
-        $this->_redirect('checkout');
+        $this->_redirect('checkout/onepage/failure');
     }
 
     /**
