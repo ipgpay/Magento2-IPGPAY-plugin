@@ -8,7 +8,6 @@
 namespace IPGPAY\IPGPAYMagento2\Controller\Land;
 
 use Magento\Framework\App\Action\Action;
-use Magento\Sales\Model\Order;
 
 class Returns extends Action
 {

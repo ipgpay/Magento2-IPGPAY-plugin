@@ -7,18 +7,21 @@
  **/
 namespace IPGPAY\IPGPAYMagento2\Controller\Notification;
 
-use IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidNotificationException;
+use IPGPAY\IPGPAYMagento2\API\Constants;
 use IPGPAY\IPGPAYMagento2\API\Functions;
+use IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidNotificationException;
+
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+
 use Magento\Store\Model\ScopeInterface;
-use IPGPAY\IPGPAYMagento2\API\Constants;
+
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Order\CreditmemoFactory;
-use Magento\Sales\Model\Service\CreditmemoService;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Service\CreditmemoService;
+use Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
  * Class Handle
@@ -62,7 +65,6 @@ class Handle extends Action
         $this->_scopeConfig = $scopeConfig;
     }
 
-
     /**
      * Entry point for controller handling
      */
@@ -75,9 +77,9 @@ class Handle extends Action
         } catch (InvalidNotificationException $e) {
             return $e->getMessage();
         } catch (\Exception $e) {
-            return '';    
+            return '';
         }
-        
+
         unset($this->fields['PS_EXPIRETIME']);
         unset($this->fields['PS_SIGTYPE']);
 
@@ -100,7 +102,7 @@ class Handle extends Action
                         break;
                     case Constants::TRANSACTION_MODE_SALE:
                         $this->payment->setIsTransactionClosed(true);
-                        $this->addTransaction(Payment\Transaction::TYPE_ORDER);                        
+                        $this->addTransaction(Payment\Transaction::TYPE_ORDER);
                         break;
                 }
                 $this->handleOrderNotification();
@@ -148,7 +150,6 @@ class Handle extends Action
         return null;
     }
 
-
     /**
      * Update order state with a comment
      *
@@ -172,7 +173,7 @@ class Handle extends Action
     {
         $this->signature = $this->_request->getParam('PS_SIGNATURE');
         foreach ($this->_request->getParams() as $key => $value) {
-            if ($key != 'PS_SIGNATURE' && array_key_exists($key, $_COOKIE) ==false) {
+            if ($key != 'PS_SIGNATURE' && array_key_exists($key, $_COOKIE) == false) {
                 $this->fields[$key] = $value;
             }
         }
@@ -255,7 +256,7 @@ class Handle extends Action
      */
     private function loadOrderAndPayment()
     {
-        $this->order = $this->_objectManager->get('Magento\Sales\Model\Order')->loadByIncrementId($this->fields['order_reference']);
+        $this->order   = $this->_objectManager->get('Magento\Sales\Model\Order')->loadByIncrementId($this->fields['order_reference']);
         $this->payment = $this->order->getPayment();
     }
 
@@ -275,12 +276,13 @@ class Handle extends Action
      * @param array $fields
      * @return string
      */
-    private function joinTransactionFields($fields) {
+    private function joinTransactionFields($fields)
+    {
         $result = '';
-        
+
         foreach ($fields as $key => $value) {
-            $result .= '['.$key.']->['.$value.'], ';
-        }       
+            $result .= '[' . $key . ']->[' . $value . '], ';
+        }
 
         return $result;
     }
@@ -326,7 +328,7 @@ class Handle extends Action
     private function hasInvoice()
     {
         $invoices = $this->order->getInvoiceCollection();
-        return  count($invoices) > 0;
+        return count($invoices) > 0;
     }
 
     /**
@@ -338,7 +340,7 @@ class Handle extends Action
         $transaction = $this->payment->addTransaction($type);
         $this->payment->addTransactionCommentsToOrder(
             $transaction,
-            "Transaction created from notification type ".$this->fields['notification_type']
+            "Transaction created from notification type " . $this->fields['notification_type']
         );
         $this->payment->setParentTransactionId(null);
         $this->payment->save();
@@ -369,7 +371,7 @@ class Handle extends Action
         $history = $this->order->addStatusHistoryComment('Payment received email sent to customer');
         $history->setIsCustomerNotified(true);
         $this->order->save();
-        
+
         return $this;
     }
 

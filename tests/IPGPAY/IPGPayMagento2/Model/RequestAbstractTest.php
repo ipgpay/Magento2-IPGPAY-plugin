@@ -8,7 +8,6 @@
  * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
  * For further information, please contact the copyright owner by email copyright@ipgholdings.net
  **/
-namespace IPGPAY\Test\Unit\Model;
 
 use PHPUnit\Framework\TestCase;
 use IPGPAY\IPGPAYMagento2\API\Request\Settle as Settle;
@@ -30,11 +29,11 @@ class RequestAbstractTest extends TestCase
     public function test_url_empty()
     {
         $config = [
-            'api_base_url'=>'',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => '',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $request = new Settle($config);
         $request->sendRequest();
@@ -47,11 +46,11 @@ class RequestAbstractTest extends TestCase
     public function test_url_invaild()
     {
         $config = [
-            'api_base_url'=>'test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $request = new Settle($config);
         $request->sendRequest();
@@ -64,16 +63,15 @@ class RequestAbstractTest extends TestCase
     public function test_url_clientId_empty()
     {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $request = new Settle($config);
         $request->sendRequest();
     }
-
 
     /**
      * @expectedException \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidRequestException
@@ -82,11 +80,11 @@ class RequestAbstractTest extends TestCase
     public function test_url_apikey_empty()
     {
         $config = [
-          'api_base_url'=>'https://www.test.com',
-          'api_client_id'=>'123456',
-          'api_key'=>'',
-          'notify'=>'0',
-          'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $request = new Settle($config);
         $request->sendRequest();

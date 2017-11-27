@@ -26,15 +26,15 @@ class Functions
         }
         if (strstr($Amount, '.')) {
             $dot = strrpos($Amount, '.');
-            if ($dot==0) {
-                $centlen = strlen($Amount)-1;
-                if ($centlen>2) {
+            if ($dot == 0) {
+                $centlen = strlen($Amount) - 1;
+                if ($centlen > 2) {
                     return false;
                 }
             } else {
-                if ($dot>0) {
-                    $centlen = strlen($Amount)-strrpos($Amount, '.')-1;
-                    if ($centlen>2) {
+                if ($dot > 0) {
+                    $centlen = strlen($Amount) - strrpos($Amount, '.') - 1;
+                    if ($centlen > 2) {
                         return false;
                     }
                 }
@@ -51,7 +51,7 @@ class Functions
      */
     public static function isValidSqlInt($value)
     {
-        if (preg_match('/^\d+$/', (string)$value) && $value <= 2147483647) {
+        if (preg_match('/^\d+$/', (string) $value) && $value <= 2147483647) {
             return true;
         }
 
@@ -66,7 +66,7 @@ class Functions
      */
     public static function isValidSqlSmallInt($value)
     {
-        if (preg_match('/^\d+$/', (string)$value) && $value <= 32767) {
+        if (preg_match('/^\d+$/', (string) $value) && $value <= 32767) {
             return true;
         }
 
@@ -81,7 +81,7 @@ class Functions
      */
     public static function isValidSqlBigInt($value)
     {
-        if (preg_match('/^\d+$/', (string)$value) && $value <= 9223372036854775807) {
+        if (preg_match('/^\d+$/', (string) $value) && $value <= 9223372036854775807) {
             return true;
         }
 

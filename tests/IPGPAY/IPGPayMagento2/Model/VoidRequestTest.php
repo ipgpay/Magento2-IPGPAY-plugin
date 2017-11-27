@@ -8,7 +8,6 @@
  * result in severe civil and criminal penalties and will be prosecuted to the maximum extent permissible at law.
  * For further information, please contact the copyright owner by email copyright@ipgholdings.net
  **/
-namespace IPGPAY\Test\Unit\Model;
 
 use PHPUnit\Framework\TestCase;
 use \IPGPAY\IPGPAYMagento2\API\Request\VoidRequest as VoidRequest;
@@ -22,11 +21,11 @@ class VoidRequestTest extends TestCase
     protected function setUp()
     {
         $config = [
-            'api_base_url'=>'https://my.ipgholdings.net',
-            'api_client_id'=>'4003442',
-            'api_key'=>'xYKifLzembIHivJFJveO',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://my.ipgholdings.net',
+            'api_client_id' => '4003442',
+            'api_key'       => 'xYKifLzembIHivJFJveO',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $this->model = new VoidRequest($config);
     }
@@ -38,11 +37,11 @@ class VoidRequestTest extends TestCase
     public function test_orderId_empty()
     {
         $config = [
-            'api_base_url'=>'https://www.test.com',
-            'api_client_id'=>'123456',
-            'api_key'=>'123456',
-            'notify'=>'0',
-            'test_mode'=>'1',
+            'api_base_url'  => 'https://www.test.com',
+            'api_client_id' => '123456',
+            'api_key'       => '123456',
+            'notify'        => '0',
+            'test_mode'     => '1',
         ];
         $voidRequest = new VoidRequest($config);
         $voidRequest->setOrderId(null);

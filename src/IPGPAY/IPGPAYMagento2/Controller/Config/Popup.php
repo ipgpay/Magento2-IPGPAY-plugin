@@ -9,11 +9,11 @@ namespace IPGPAY\IPGPAYMagento2\Controller\Config;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Registry;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Controller\ResultFactory;
 
 class Popup extends Action
 {
@@ -30,14 +30,14 @@ class Popup extends Action
      */
     protected $_resultPageFactory;
 
-     /**
-      * Constructor
-      *
-      * @param Context $context
-      * @param Registry $coreRegistry
-      * @param ScopeConfigInterface $scopeConfig
-      * @param PageFactory $pageFactory
-      */
+    /**
+     * Constructor
+     *
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param ScopeConfigInterface $scopeConfig
+     * @param PageFactory $pageFactory
+     */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
@@ -45,11 +45,11 @@ class Popup extends Action
         PageFactory $pageFactory
     ) {
         parent::__construct($context);
-        $this->_coreRegistry = $coreRegistry;
-        $this->_scopeConfig = $scopeConfig;
+        $this->_coreRegistry      = $coreRegistry;
+        $this->_scopeConfig       = $scopeConfig;
         $this->_resultPageFactory = $pageFactory;
     }
-    
+
     /**
      * Customer will be returned here if payment is unsuccessful
      */
@@ -70,6 +70,6 @@ class Popup extends Action
      */
     private function getIPGPAYConfig($key)
     {
-        return  $this->_scopeConfig->getValue("payment/ipgpay_ipgpaymagento2/$key", ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue("payment/ipgpay_ipgpaymagento2/$key", ScopeInterface::SCOPE_STORE);
     }
 }
