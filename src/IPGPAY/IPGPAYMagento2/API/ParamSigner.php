@@ -22,10 +22,9 @@ class ParamSigner
     protected $_logger;
 
     /**
-     * log injection
-     * @param Log\LoggerInterface $logger
+     * log injection - or not.
      */
-    public function __construct(Log\LoggerInterface $logger)
+    public function __construct()
     {
         $this->_logger = \Magento\Framework\App\ObjectManager::getInstance()->get('\Psr\Log\LoggerInterface');
     }
