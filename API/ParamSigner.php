@@ -19,6 +19,7 @@ class ParamSigner
     private $lifetime      = 24;
     private $signatureType = 'PSSHA1';
 
+    /** @var \Psr\Log\LoggerInterface */
     protected $_logger;
 
     /**

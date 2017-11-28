@@ -8,6 +8,7 @@
 
 class ParamSignerTest extends PHPUnit\Framework\TestCase
 {
+    /** @var \IPGPAY\IPGPAYMagento2\API\ParamSigner */
     protected $model;
 
     protected function setup()

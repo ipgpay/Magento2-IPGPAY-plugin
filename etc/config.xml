@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
       <payment>
-          <ipgpay_gateway>
+          <ipgpay_ipgpaymagento2>
               <active>1</active>
               <title>Credit Card (IPGPAY)</title>
               <order_status>pending_payment</order_status>
@@ -23,7 +23,7 @@
               <payment_action>redirect</payment_action>
               <allowspecific>0</allowspecific>
               <sort_order>1</sort_order>
-          </ipgpay_gateway>
+          </ipgpay_ipgpaymagento2>
       </payment>
     </default>
 </config>
