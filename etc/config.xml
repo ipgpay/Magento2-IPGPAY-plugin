@@ -4,7 +4,7 @@
       <payment>
           <ipgpay_ipgpaymagento2>
               <active>1</active>
-              <title>Credit Card (IPGPAY)</title>
+              <title>Credit Card  (IPGPAY)</title>
               <order_status>pending_payment</order_status>
               <instructions>Instruction.</instructions>
               <payment_action>true</payment_action>
