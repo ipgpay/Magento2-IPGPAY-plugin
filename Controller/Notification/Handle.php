@@ -65,6 +65,13 @@ class Handle extends Action
         $this->_scopeConfig = $scopeConfig;
     }
 
+    public function getBasicResponse($responseText)
+    {
+        $result = new \Magento\Framework\Controller\Result\Raw();
+        $result->setContents($responseText);
+        return $result;
+    }
+
     /**
      * Entry point for controller handling
      */
@@ -75,9 +82,9 @@ class Handle extends Action
         try {
             $this->validate();
         } catch (InvalidNotificationException $e) {
-            return $e->getMessage();
+            return $this->getBasicResponse($e->getMessage());
         } catch (\Exception $e) {
-            return '';
+            return $this->getBasicResponse('');
         }
 
         unset($this->fields['PS_EXPIRETIME']);
@@ -128,7 +135,7 @@ class Handle extends Action
         }
         $this->payment->save();
         //Respond with OK
-        return Constants::NOTIFICATION_RESPONSE_SUCCESSFUL;
+        return $this->getBasicResponse(Constants::NOTIFICATION_RESPONSE_SUCCESSFUL);
     }
 
     /**
