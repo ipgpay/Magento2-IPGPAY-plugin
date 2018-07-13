@@ -7,6 +7,9 @@
  **/
 namespace IPGPAY\IPGPAYMagento2\Controller\Config;
 
+use IPGPAY\IPGPAYMagento2\Controller\Redirect\Index;
+use IPGPAY\IPGPAYMagento2\API\ParamSigner;
+
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -15,7 +18,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\ScopeInterface;
 
-class Popup extends Action
+class Popup extends Index
 {
     /**
      * @var ScopeConfigInterface
@@ -31,27 +34,8 @@ class Popup extends Action
     protected $_resultPageFactory;
 
     /**
-     * Constructor
-     *
-     * @param Context $context
-     * @param Registry $coreRegistry
-     * @param ScopeConfigInterface $scopeConfig
-     * @param PageFactory $pageFactory
-     */
-    public function __construct(
-        Context $context,
-        Registry $coreRegistry,
-        ScopeConfigInterface $scopeConfig,
-        PageFactory $pageFactory
-    ) {
-        parent::__construct($context);
-        $this->_coreRegistry      = $coreRegistry;
-        $this->_scopeConfig       = $scopeConfig;
-        $this->_resultPageFactory = $pageFactory;
-    }
-
-    /**
-     * Customer will be returned here if payment is unsuccessful
+     * @return \Magento\Framework\Controller\Result\Json
+     * @throws \IPGPAY\IPGPAYMagento2\API\Exceptions\InvalidSignatureTypeException
      */
     public function execute()
     {
@@ -59,17 +43,32 @@ class Popup extends Action
          * @var \Magento\Framework\Controller\Result\Json $resultJson
          */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $isUsePopup = $this->getIPGPAYConfig("use_popup");
-        $resultJson->setData($isUsePopup);
-        return $resultJson;
-    }
+        if ($this->_isUsePopup) {
 
-    /**
-     * @param string $key
-     * @return string
-     */
-    private function getIPGPAYConfig($key)
-    {
-        return $this->_scopeConfig->getValue("payment/ipgpay_ipgpaymagento2/$key", ScopeInterface::SCOPE_STORE);
+            $order                    = $this->_getCheckout()->getLastRealOrder();
+            $formSubmissionParameters = $this->getFormSubmissionParameters($order);
+
+            $signatureLifetime = $this->getIPGPAYConfig('request_expiry');
+            if (!$signatureLifetime) {
+                $signatureLifetime = Config::DEFAULT_SIGNATURE_LIFETIME;
+            }
+
+            $paramSigner = new ParamSigner();
+            $paramSigner->setSecret($this->getIPGPAYConfig('secret_key'));
+            $paramSigner->setLifeTime($signatureLifetime);
+            $paramSigner->setSignatureType('PSSHA1');
+
+            $sigstring = $paramSigner->generateQueryString($formSubmissionParameters);
+
+            $paymentFormUrl = $this->getPaymentFormUrl() . "?" . $sigstring;
+            /**
+             * @var \Magento\Framework\Controller\Result\Json $resultJson
+             */
+            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+            $resultJson->setData($result = ['popup' => "1",'domain' => $this->getPaymentFormHost(), 'url' => $paymentFormUrl]);
+            return $resultJson;
+        }
+        $resultJson->setData(['popup'=>false]);
+        return $resultJson;
     }
 }

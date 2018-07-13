@@ -14,7 +14,6 @@ namespace IPGPAY\IPGPAYMagento2\API;
 class Config
 {
     /**
-     *
      */
     const API_BASE_URL = 'https://my.ipgpay.com';
     /**
