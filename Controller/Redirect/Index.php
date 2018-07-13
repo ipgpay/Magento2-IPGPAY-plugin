@@ -55,59 +55,40 @@ class Index extends Action
         $this->_coreRegistry      = $coreRegistry;
         $this->_scopeConfig       = $scopeConfig;
         $this->_resultPageFactory = $pageFactory;
+        $this->_isUsePopup        = $this->getIPGPAYConfig('use_popup');
     }
 
-    /**
-     *
-     */
-    public function execute()
+    protected function getFormSubmissionParameters($order)
     {
-        $this->_isUsePopup        = $this->getIPGPAYConfig('use_popup');
-        $order                    = $this->_getCheckout()->getLastRealOrder();
-        $formSubmissionParameters = $this->mergeFormParameters(
+        return $this->mergeFormParameters(
             $this->getCustomerParameters($order),
             $this->getOrderItemsParameters($order),
             $this->getGatewayParameters($order)
         );
+    }
 
-        if ($this->_isUsePopup) {
-            $signatureLifetime = $this->getIPGPAYConfig('request_expiry');
-            if (!$signatureLifetime) {
-                $signatureLifetime = Config::DEFAULT_SIGNATURE_LIFETIME;
-            }
+    public function execute()
+    {
+        $order                    = $this->_getCheckout()->getLastRealOrder();
+        $formSubmissionParameters = $this->getFormSubmissionParameters($order);
 
-            $paramSigner = new ParamSigner();
-            $paramSigner->setSecret($this->getIPGPAYConfig('secret_key'));
-            $paramSigner->setLifeTime($signatureLifetime);
-            $paramSigner->setSignatureType('PSSHA1');
-
-            $sigstring = $paramSigner->generateQueryString($formSubmissionParameters);
-
-            $paymentFormUrl = $this->getPaymentFormUrl() . "?" . $sigstring;
-            /**
-             * @var \Magento\Framework\Controller\Result\Json $resultJson
-             */
-            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-            $resultJson->setData($paymentFormUrl);
-            return $resultJson;
-        } else {
-            $this->_coreRegistry->register('ipgpay_payment_form_data', $formSubmissionParameters);
-            $this->_coreRegistry->register('ipgpay_payment_form_url', $this->getPaymentFormUrl());
-            $resultPage = $this->_resultPageFactory->create();
-            return $resultPage;
-        }
+        $this->_coreRegistry->register('ipgpay_payment_form_data', $formSubmissionParameters);
+        $this->_coreRegistry->register('ipgpay_payment_form_url', $this->getPaymentFormUrl());
+        $resultPage = $this->_resultPageFactory->create();
+        return $resultPage;
     }
 
     /**
      * @return string
      */
-    private function getPaymentFormUrl()
+    protected function getPaymentFormUrl()
     {
-        return preg_replace(
-            '#/payment/form/post#i',
-            '',
-            $this->getIPGPAYConfig('payment_form_url')
-        ) . '/payment/form/post';
+        return $this->getPaymentFormHost() . '/payment/form/post';
+    }
+
+    protected function getPaymentFormHost()
+    {
+        return preg_replace('#/payment/form/post#i','', $this->getIPGPAYConfig('payment_form_url'));
     }
 
     /**
@@ -116,7 +97,7 @@ class Index extends Action
      * @param $order
      * @return array
      */
-    private function getCustomerParameters(Order $order)
+    protected function getCustomerParameters(Order $order)
     {
         $billingAddress = $order->getBillingAddress();
         $billing        = [];
@@ -165,7 +146,7 @@ class Index extends Action
      * @param Order $order
      * @return array
      */
-    private function getOrderItemsParameters(Order $order)
+    protected function getOrderItemsParameters(Order $order)
     {
         $items = [];
 
@@ -263,7 +244,7 @@ class Index extends Action
     /**
      * @return \Magento\Checkout\Model\Session
      */
-    private function _getCheckout()
+    protected function _getCheckout()
     {
         return $this->_objectManager->get('Magento\Checkout\Model\Session');
     }
@@ -274,7 +255,7 @@ class Index extends Action
      * @param Order $order
      * @return array
      */
-    private function getGatewayParameters(Order $order)
+    protected function getGatewayParameters(Order $order)
     {
         if ($this->_isUsePopup) {
             return [
@@ -312,7 +293,7 @@ class Index extends Action
      * @param $gatewayParameters
      * @return array
      */
-    private function mergeFormParameters($customerParameters, $orderItemsParameters, $gatewayParameters)
+    protected function mergeFormParameters($customerParameters, $orderItemsParameters, $gatewayParameters)
     {
         $fields = [];
         foreach ($gatewayParameters as $field => $value) {
@@ -345,7 +326,7 @@ class Index extends Action
      * @var string $key
      * @return string
      */
-    private function getIPGPAYConfig($key)
+    protected function getIPGPAYConfig($key)
     {
         return $this->_scopeConfig->getValue("payment/ipgpay_ipgpaymagento2/$key", ScopeInterface::SCOPE_STORE);
     }

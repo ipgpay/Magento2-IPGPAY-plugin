@@ -14,7 +14,7 @@ namespace IPGPAY\IPGPAYMagento2\API;
 class Config
 {
     /**
-     *
+     * ----why does this file exist??? config settings are stored in db and configured in admin panel??
      */
     const API_BASE_URL = 'https://my.ipgpay.com';
     /**
