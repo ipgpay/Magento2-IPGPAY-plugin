@@ -5,6 +5,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE.txt file for details.
  **/
+
 namespace IPGPAY\IPGPAYMagento2\Controller\Redirect;
 
 use IPGPAY\IPGPAYMagento2\API\Config;
@@ -37,6 +38,7 @@ class Index extends Action
     protected $_resultPageFactory;
 
     protected $_isUsePopup;
+
     /**
      * Constructor
      *
@@ -50,12 +52,13 @@ class Index extends Action
         Registry $coreRegistry,
         ScopeConfigInterface $scopeConfig,
         PageFactory $pageFactory
-    ) {
+    )
+    {
         parent::__construct($context);
-        $this->_coreRegistry      = $coreRegistry;
-        $this->_scopeConfig       = $scopeConfig;
+        $this->_coreRegistry = $coreRegistry;
+        $this->_scopeConfig = $scopeConfig;
         $this->_resultPageFactory = $pageFactory;
-        $this->_isUsePopup        = $this->getIPGPAYConfig('use_popup');
+        $this->_isUsePopup = $this->getIPGPAYConfig('use_popup');
     }
 
     protected function getFormSubmissionParameters($order)
@@ -69,7 +72,7 @@ class Index extends Action
 
     public function execute()
     {
-        $order                    = $this->_getCheckout()->getLastRealOrder();
+        $order = $this->_getCheckout()->getLastRealOrder();
         $formSubmissionParameters = $this->getFormSubmissionParameters($order);
 
         $this->_coreRegistry->register('ipgpay_payment_form_data', $formSubmissionParameters);
@@ -88,7 +91,7 @@ class Index extends Action
 
     protected function getPaymentFormHost()
     {
-        return preg_replace('#/payment/form/post#i','', $this->getIPGPAYConfig('payment_form_url'));
+        return preg_replace('#/payment/form/post#i', '', $this->getIPGPAYConfig('payment_form_url'));
     }
 
     /**
@@ -100,42 +103,42 @@ class Index extends Action
     protected function getCustomerParameters(Order $order)
     {
         $billingAddress = $order->getBillingAddress();
-        $billing        = [];
+        $billing = [];
         if ($billingAddress) {
             $billing = [
                 'customer_first_name' => $billingAddress->getFirstname(),
-                'customer_last_name'  => $billingAddress->getLastname(),
-                'customer_company'    => $billingAddress->getCompany(),
-                'customer_city'       => $billingAddress->getCity(),
-                'customer_state'      => $billingAddress->getRegion(),
-                'customer_postcode'   => $billingAddress->getPostcode(),
-                'customer_country'    => $billingAddress->getCountryId(),
-                'customer_email'      => $billingAddress->getEmail(),
-                'customer_phone'      => $billingAddress->getTelephone(),
+                'customer_last_name' => $billingAddress->getLastname(),
+                'customer_company' => $billingAddress->getCompany(),
+                'customer_city' => $billingAddress->getCity(),
+                'customer_state' => $billingAddress->getRegion(),
+                'customer_postcode' => $billingAddress->getPostcode(),
+                'customer_country' => $billingAddress->getCountryId(),
+                'customer_email' => $billingAddress->getEmail(),
+                'customer_phone' => $billingAddress->getTelephone(),
             ];
             $address = $billingAddress->getStreet();
             if (is_array($address)) {
-                $billing['customer_address']  = $address[0];
+                $billing['customer_address'] = $address[0];
                 $billing['customer_address2'] = isset($address[1]) ? $address[1] : '';
             }
         }
         $shippingAddress = $order->getShippingAddress();
-        $shipping        = [];
+        $shipping = [];
         if ($shippingAddress) {
             $shipping = [
                 'shipping_first_name' => $shippingAddress->getFirstname(),
-                'shipping_last_name'  => $shippingAddress->getLastname(),
-                'shipping_company'    => $shippingAddress->getCompany(),
-                'shipping_city'       => $shippingAddress->getCity(),
-                'shipping_state'      => $shippingAddress->getRegion(),
-                'shipping_postcode'   => $shippingAddress->getPostcode(),
-                'shipping_country'    => $shippingAddress->getCountryId(),
-                'shipping_email'      => $shippingAddress->getEmail(),
-                'shipping_phone'      => $shippingAddress->getTelephone(),
+                'shipping_last_name' => $shippingAddress->getLastname(),
+                'shipping_company' => $shippingAddress->getCompany(),
+                'shipping_city' => $shippingAddress->getCity(),
+                'shipping_state' => $shippingAddress->getRegion(),
+                'shipping_postcode' => $shippingAddress->getPostcode(),
+                'shipping_country' => $shippingAddress->getCountryId(),
+                'shipping_email' => $shippingAddress->getEmail(),
+                'shipping_phone' => $shippingAddress->getTelephone(),
             ];
             $address = $shippingAddress->getStreet();
             if (is_array($address)) {
-                $shipping['shipping_address']  = $address[0];
+                $shipping['shipping_address'] = $address[0];
                 $shipping['shipping_address2'] = isset($address[1]) ? $address[1] : '';
             }
         }
@@ -151,8 +154,9 @@ class Index extends Action
         $items = [];
 
         $shippingCost = $order->getShippingAmount();
-        $taxCost      = $order->getTaxAmount();
-        $discount     = 0;
+        $taxCost = $order->getTaxAmount();
+        $discount = 0;
+        $appliedTaxCost = 0;
 
         $orderItems = $order->getAllItems();
 
@@ -177,7 +181,11 @@ class Index extends Action
             );
 
             $discount -= $item->getDiscountAmount();
+            $appliedTaxCost += $this->getWeeeAppliedTaxAmount($item);
         }
+
+        // include the Weee module applied tax in the generic tax amount.
+        $taxCost += $appliedTaxCost;
 
         if ($shippingCost > 0) {
             $items[] = $this->getItemArray(++$idx, null, 'Shipping', 'Shipping and handling', '1', '1', $shippingCost, $order->getOrderCurrencyCode());
@@ -191,6 +199,19 @@ class Index extends Action
             $items[] = $this->getItemArray(++$idx, null, 'Discount', '', '1', '1', $discount, $order->getOrderCurrencyCode(), true);
         }
         return $items;
+    }
+
+    /**
+     * @param Order\Item $item
+     * @return float
+     */
+    protected function getWeeeAppliedTaxAmount($item)
+    {
+        if (!method_exists($item, 'getWeeeTaxApplied')
+            || !method_exists($item, 'getWeeeTaxAppliedAmount')) {
+            return 0;
+        }
+        return $item->getWeeeTaxApplied() ? $item->getWeeeTaxAppliedAmount() : 0;
     }
 
     /**
@@ -218,11 +239,11 @@ class Index extends Action
         }
 
         $prefix = sprintf('item_%d', $idx);
-        $ret    = [
-            $prefix . '_name'                    => $name,
-            $prefix . '_description'             => $description,
-            $prefix . '_qty'                     => $qty,
-            $prefix . '_digital'                 => $digital,
+        $ret = [
+            $prefix . '_name' => $name,
+            $prefix . '_description' => $description,
+            $prefix . '_qty' => $qty,
+            $prefix . '_digital' => $digital,
             $prefix . '_unit_price_' . $currency => $price,
         ];
 
@@ -259,28 +280,28 @@ class Index extends Action
     {
         if ($this->_isUsePopup) {
             return [
-                'client_id'        => $this->getIPGPAYConfig('account_id'),
+                'client_id' => $this->getIPGPAYConfig('account_id'),
                 'notification_url' => $this->_url->getUrl('ipgpay/notification/handle'),
                 'test_transaction' => $this->getIPGPAYConfig('test_mode') == '1' ? '1' : '0',
-                'order_reference'  => $order->getIncrementId(),
-                'order_currency'   => $order->getOrderCurrencyCode(),
-                'form_id'          => $this->getIPGPAYConfig('payment_form_id'),
-                'merchant_name'    => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
-                'create_customer'  => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0',
+                'order_reference' => $order->getIncrementId(),
+                'order_currency' => $order->getOrderCurrencyCode(),
+                'form_id' => $this->getIPGPAYConfig('payment_form_id'),
+                'merchant_name' => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
+                'create_customer' => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0',
             ];
         } else {
             return [
-                'client_id'        => $this->getIPGPAYConfig('account_id'),
-                'return_url'       => $this->_url->getUrl('ipgpay/land/returns'),
-                'approval_url'     => $this->_url->getUrl('ipgpay/land/success'),
-                'decline_url'      => $this->_url->getUrl('ipgpay/land/decline'),
+                'client_id' => $this->getIPGPAYConfig('account_id'),
+                'return_url' => $this->_url->getUrl('ipgpay/land/returns'),
+                'approval_url' => $this->_url->getUrl('ipgpay/land/success'),
+                'decline_url' => $this->_url->getUrl('ipgpay/land/decline'),
                 'notification_url' => $this->_url->getUrl('ipgpay/notification/handle'),
                 'test_transaction' => $this->getIPGPAYConfig('test_mode') == '1' ? '1' : '0',
-                'order_reference'  => $order->getIncrementId(),
-                'order_currency'   => $order->getOrderCurrencyCode(),
-                'form_id'          => $this->getIPGPAYConfig('payment_form_id'),
-                'merchant_name'    => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
-                'create_customer'  => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0',
+                'order_reference' => $order->getIncrementId(),
+                'order_currency' => $order->getOrderCurrencyCode(),
+                'form_id' => $this->getIPGPAYConfig('payment_form_id'),
+                'merchant_name' => $this->_scopeConfig->getValue('general/store_information/name', ScopeInterface::SCOPE_STORE),
+                'create_customer' => $this->getIPGPAYConfig('create_customers') == '1' ? '1' : '0',
             ];
         }
     }
@@ -316,8 +337,8 @@ class Index extends Action
         }
         if (!$this->_isUsePopup) {
             $fields['PS_EXPIRETIME'] = time() + 3600 * $signatureLifetime;
-            $fields['PS_SIGTYPE']    = Config::SIGNATURE_TYPE;
-            $fields['PS_SIGNATURE']  = Functions::createSignature($fields, $this->getIPGPAYConfig('secret_key'));
+            $fields['PS_SIGTYPE'] = Config::SIGNATURE_TYPE;
+            $fields['PS_SIGNATURE'] = Functions::createSignature($fields, $this->getIPGPAYConfig('secret_key'));
         }
         return $fields;
     }
