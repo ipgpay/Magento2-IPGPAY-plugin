@@ -18,6 +18,9 @@ class CsrfValidatorSkip
                 $request,
                 $action
         ) {
+                // requests to this plugin are expected to originate from the IPGPAY servers.
+                // as such, they cannot include the CSRF token. The requests are signed and 
+                // verified using the RequestSigner module.
                 if ($request->getModuleName() == 'ipgpay') {
                         return;
                 }
