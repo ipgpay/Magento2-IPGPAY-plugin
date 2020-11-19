@@ -236,6 +236,7 @@ class ParamSigner
 
     public function is_utf8($value)
     {
+        $value = (string)$value;
         $length = strlen($value);
         for ($i = 0; $i < $length; $i++) {
             $c = ord($value[$i]);
