@@ -484,9 +484,8 @@ class Handle extends Action
             $transaction = $this->payment->addTransaction(Payment\Transaction::TYPE_VOID);
             $transaction->setAdditionalInformation(Payment\Transaction::RAW_DETAILS, $this->fields)->save();
         }
-        $this->order->setState(Order::STATE_CANCELED);
-        $this->order->setStatus(Order::STATE_CANCELED);
-        $history = $this->order->addStatusHistoryComment('Order Abandoned');
+        $failureReason = trim(($this->fields['response_code'] ?? '') . ' ' . ($this->fields['response_text'] ?? ''));
+        $history = $this->order->addStatusHistoryComment(!empty($failureReason) ? $failureReason : 'Order Failure');
         $history->setIsCustomerNotified(false); // for backwards compatibility
         $this->order->save();
         return $this;
