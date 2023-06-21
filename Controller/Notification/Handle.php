@@ -377,8 +377,10 @@ class Handle extends Action
         $this->order->setEmailSent(true);
         $history = $this->order->addStatusHistoryComment('Payment received email sent to customer');
         $history->setIsCustomerNotified(true);
+        //Update the order with the correct status
+        $this->order->setState($orderState);
+        $this->order->setStatus($orderState);
         $this->order->save();
-
         return $this;
     }
 
@@ -425,6 +427,9 @@ class Handle extends Action
         if (!$this->hasInvoice()) {
             $this->createInvoice();
         }
+        $this->order->setState(Order::STATE_PROCESSING);
+        $this->order->setStatus(Order::STATE_PROCESSING);
+        $this->order->save();
         return $this;
     }
 
@@ -484,8 +489,17 @@ class Handle extends Action
             $transaction = $this->payment->addTransaction(Payment\Transaction::TYPE_VOID);
             $transaction->setAdditionalInformation(Payment\Transaction::RAW_DETAILS, $this->fields)->save();
         }
-        $failureReason = trim(($this->fields['response_code'] ?? '') . ' ' . ($this->fields['response_text'] ?? ''));
-        $history = $this->order->addStatusHistoryComment(!empty($failureReason) ? $failureReason : 'Order Failure');
+        $this->order->setState(Order::STATE_CANCELED);
+        $this->order->setStatus(Order::STATE_CANCELED);
+        $failureReasonCode = '';
+        $failureReasonText = 'Order Failure';
+        if (!empty($this->fields['response_code'])) {
+            $failureReasonCode = trim($this->fields['response_code']);
+        }
+        if (!empty($this->fields['response_text'])) {
+            $failureReasonText = trim($this->fields['response_text']);
+        }
+        $history = $this->order->addStatusHistoryComment($failureReasonCode . ' ' . $failureReasonText);
         $history->setIsCustomerNotified(false); // for backwards compatibility
         $this->order->save();
         return $this;
